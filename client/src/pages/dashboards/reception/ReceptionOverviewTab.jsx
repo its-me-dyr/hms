@@ -455,7 +455,7 @@ export default function ReceptionOverviewTab({
                               {getInitials(item.patientName)}
                             </div>
                             <div>
-                              <div style={{ fontWeight: 600, color: '#0f172a' }}>{item.patientName}</div>
+                              <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.patientName}</div>
                               <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{item.patientId}</div>
                             </div>
                           </div>
@@ -468,7 +468,7 @@ export default function ReceptionOverviewTab({
                           <span
                             style={{
                               fontSize: '0.75rem',
-                              color: '#475569',
+                              color: 'var(--text-secondary)',
                               background: '#f1f5f9',
                               padding: '0.2rem 0.55rem',
                               borderRadius: '6px',
@@ -482,7 +482,7 @@ export default function ReceptionOverviewTab({
                           <span
                             style={{
                               fontWeight: 600,
-                              color: '#0f172a',
+                              color: 'var(--text-primary)',
                               fontSize: '0.8125rem',
                               display: 'inline-flex',
                               alignItems: 'center',
@@ -578,10 +578,10 @@ export default function ReceptionOverviewTab({
                           {q.tokenNumber}
                         </span>
                       </td>
-                      <td style={{ fontWeight: 600, color: '#0f172a' }}>{q.department}</td>
+                      <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{q.department}</td>
                       <td style={{ color: '#334155' }}>{q.doctorName}</td>
                       <td>
-                        <div style={{ fontWeight: 600, color: '#0f172a' }}>{q.patientName}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{q.patientName}</div>
                         <div style={{ fontSize: '0.72rem', color: q.priority === 'Urgent' ? '#ef4444' : '#64748b' }}>
                           {q.priority} priority
                         </div>
@@ -594,7 +594,7 @@ export default function ReceptionOverviewTab({
                             gap: '0.3rem',
                             fontSize: '0.8rem',
                             color: '#64748b',
-                            background: '#f8fafc',
+                            background: 'var(--bg-surface)',
                             border: '1px solid var(--border-color)',
                             padding: '0.15rem 0.5rem',
                             borderRadius: '6px',
@@ -739,7 +739,7 @@ export default function ReceptionOverviewTab({
                         {getInitials(p.name)}
                       </div>
                       <div>
-                        <div style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.82rem' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.82rem' }}>
                           {p.name}
                         </div>
                         <div style={{ fontSize: '0.72rem', color: '#64748b' }}>

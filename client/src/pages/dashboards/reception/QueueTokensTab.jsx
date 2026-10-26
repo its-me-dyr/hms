@@ -299,7 +299,7 @@ export default function QueueTokensTab() {
               Waiting in Queue: <strong style={{ color: '#0891b2' }}>{waitingTokens.length}</strong>
             </span>
             <span style={{ color: '#64748b' }}>
-              Total Today: <strong style={{ color: '#0f172a' }}>{tokens.length}</strong>
+              Total Today: <strong style={{ color: 'var(--text-primary)' }}>{tokens.length}</strong>
             </span>
           </div>
         </div>
@@ -499,7 +499,7 @@ export default function QueueTokensTab() {
                         </div>
                       </td>
                       <td>
-                        <div style={{ fontWeight: 600, color: '#0f172a' }}>{pName}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{pName}</div>
                         <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
                           Phone: {item.patient?.phone || item.phone || 'N/A'}
                         </div>
@@ -511,7 +511,7 @@ export default function QueueTokensTab() {
                         </div>
                       </td>
                       <td>
-                        <div style={{ fontSize: '0.85rem', color: '#475569' }}>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                           {item.department?.name || 'General Clinic'}
                         </div>
                       </td>

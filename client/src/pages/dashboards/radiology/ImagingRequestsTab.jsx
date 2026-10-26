@@ -181,7 +181,7 @@ export default function ImagingRequestsTab({ onNavigateTab }) {
           ) : requests.length === 0 ? (
             <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
               <ClipboardList size={36} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-              <p style={{ fontWeight: 600, color: '#475569' }}>No imaging orders match the selected filters.</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No imaging orders match the selected filters.</p>
               <p style={{ fontSize: '0.85rem' }}>Adjust search criteria or view all requests.</p>
             </div>
           ) : (
@@ -304,8 +304,8 @@ export default function ImagingRequestsTab({ onNavigateTab }) {
               </button>
             </div>
             <div className="lab-modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                <h4 style={{ margin: '0 0 0.4rem', fontSize: '0.85rem', color: '#475569' }}>Patient Demographics</h4>
+              <div style={{ background: 'var(--bg-surface)', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                <h4 style={{ margin: '0 0 0.4rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Patient Demographics</h4>
                 <div style={{ fontSize: '1rem', fontWeight: 700 }}>
                   {inspectItem.patient?.fullName || inspectItem.patient?.name || 'Unknown Patient'}
                 </div>
@@ -316,12 +316,12 @@ export default function ImagingRequestsTab({ onNavigateTab }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: '#475569' }}>Procedure</h4>
+                  <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Procedure</h4>
                   <div style={{ fontWeight: 600 }}>{inspectItem.studyType || inspectItem.procedureName}</div>
                   <div style={{ fontSize: '0.85rem', color: '#64748b' }}>Modality: {inspectItem.modality}</div>
                 </div>
                 <div>
-                  <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: '#475569' }}>Priority & Status</h4>
+                  <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Priority & Status</h4>
                   <span className="lab-badge lab-badge-warning">{inspectItem.priority?.toUpperCase()}</span>
                   <span className="lab-badge lab-badge-info" style={{ marginLeft: '0.5rem' }}>{inspectItem.status?.toUpperCase()}</span>
                 </div>
@@ -329,7 +329,7 @@ export default function ImagingRequestsTab({ onNavigateTab }) {
 
               {inspectItem.clinicalHistory && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: '#475569' }}>Clinical Indication / Reason for Exam</h4>
+                  <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Clinical Indication / Reason for Exam</h4>
                   <p style={{ margin: 0, fontSize: '0.85rem', background: '#f1f5f9', padding: '0.75rem', borderRadius: '6px' }}>
                     {inspectItem.clinicalHistory}
                   </p>
@@ -338,8 +338,8 @@ export default function ImagingRequestsTab({ onNavigateTab }) {
 
               {inspectItem.instructions && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: '#475569' }}>Special Referral Instructions</h4>
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#475569' }}>{inspectItem.instructions}</p>
+                  <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Special Referral Instructions</h4>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{inspectItem.instructions}</p>
                 </div>
               )}
             </div>
@@ -377,7 +377,7 @@ export default function ImagingRequestsTab({ onNavigateTab }) {
               </button>
             </div>
             <div className="lab-modal-body">
-              <p style={{ fontSize: '0.9rem', color: '#475569' }}>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                 Are you sure you want to cancel the order for <strong>{cancelModalItem.patient?.fullName || 'this patient'}</strong>?
               </p>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>

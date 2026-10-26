@@ -231,7 +231,7 @@ export default function ReportVerificationTab({ activeReport, _onNavigateTab }) 
 
             {/* Document Preview Box */}
             <div style={{
-              background: '#f8fafc',
+              background: 'var(--bg-surface)',
               border: '1px solid #e2e8f0',
               borderRadius: '12px',
               padding: '1.5rem',
@@ -266,11 +266,11 @@ export default function ReportVerificationTab({ activeReport, _onNavigateTab }) 
                 </div>
               </div>
 
-              <div style={{ background: '#ffffff', padding: '1rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                <h4 style={{ margin: '0 0 0.4rem', fontSize: '0.9rem', color: '#0f172a', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div style={{ background: 'var(--bg-card)', padding: '1rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                <h4 style={{ margin: '0 0 0.4rem', fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Impression
                 </h4>
-                <div style={{ fontSize: '0.95rem', color: '#0f172a', fontWeight: 600, whiteSpace: 'pre-line', lineHeight: 1.6 }}>
+                <div style={{ fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: 600, whiteSpace: 'pre-line', lineHeight: 1.6 }}>
                   {selectedReport.impression || 'Pending impression.'}
                 </div>
               </div>
@@ -303,7 +303,7 @@ export default function ReportVerificationTab({ activeReport, _onNavigateTab }) 
         ) : (
           <div className="lab-card" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
             <CheckCircle2 size={40} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-            <p style={{ fontWeight: 600, color: '#475569' }}>Select a report from the worklist to review and sign off.</p>
+            <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Select a report from the worklist to review and sign off.</p>
           </div>
         )}
 

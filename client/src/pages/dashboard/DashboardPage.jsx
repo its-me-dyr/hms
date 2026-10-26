@@ -97,7 +97,7 @@ export default function DashboardPage() {
           </div>
           <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <div><strong>Email:</strong> {user?.email}</div>
-            <div><strong>Assigned Role:</strong> <span className="badge badge--primary">{user?.role || user?.roleName || 'User'}</span></div>
+            <div><strong>Assigned Role:</strong> <span className="badge badge--primary">{(typeof user?.role === 'string' ? user.role : (user?.roleName || user?.role?.displayName || 'User'))}</span></div>
             <div><strong>Account Status:</strong> <span style={{ color: 'var(--color-success)', fontWeight: 600 }}>Active</span></div>
             <div><strong>Last Login:</strong> {user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Just now'}</div>
           </div>

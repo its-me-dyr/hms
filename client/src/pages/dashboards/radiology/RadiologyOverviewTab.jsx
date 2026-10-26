@@ -324,7 +324,7 @@ export default function RadiologyOverviewTab({ user, onNavigateTab }) {
                       </td>
                       <td>
                         <div>{r.studyType || r.procedureName || 'Radiology Study'}</div>
-                        <span className="lab-badge" style={{ background: '#f1f5f9', color: '#475569', fontSize: '0.7rem' }}>
+                        <span className="lab-badge" style={{ background: '#f1f5f9', color: 'var(--text-secondary)', fontSize: '0.7rem' }}>
                           {r.modality}
                         </span>
                       </td>
@@ -465,8 +465,8 @@ export default function RadiologyOverviewTab({ user, onNavigateTab }) {
               </button>
             </div>
             <div className="lab-modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: '#475569' }}>Patient Details</h4>
+              <div style={{ background: 'var(--bg-surface)', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Patient Details</h4>
                 <div><strong>{selectedStudy.patient?.fullName || selectedStudy.patient?.name || 'Unknown Patient'}</strong></div>
                 <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
                   MRN: {selectedStudy.patient?.medicalRecordNumber || 'N/A'} | Gender: {selectedStudy.patient?.gender || 'N/A'} | Age: {selectedStudy.patient?.age || 'N/A'}
@@ -474,14 +474,14 @@ export default function RadiologyOverviewTab({ user, onNavigateTab }) {
               </div>
 
               <div>
-                <h4 style={{ margin: '0 0 0.4rem', fontSize: '0.9rem', color: '#475569' }}>Procedure & Modality</h4>
+                <h4 style={{ margin: '0 0 0.4rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Procedure & Modality</h4>
                 <div><strong>{selectedStudy.studyType || selectedStudy.procedureName}</strong> ({selectedStudy.modality})</div>
                 <div style={{ fontSize: '0.85rem', color: '#64748b' }}>Body Part: {selectedStudy.bodyPart || selectedStudy.anatomicalRegion || 'General'}</div>
               </div>
 
               {selectedStudy.clinicalHistory && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.4rem', fontSize: '0.9rem', color: '#475569' }}>Clinical Indication / History</h4>
+                  <h4 style={{ margin: '0 0 0.4rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Clinical Indication / History</h4>
                   <p style={{ margin: 0, fontSize: '0.85rem', background: '#f1f5f9', padding: '0.6rem 0.8rem', borderRadius: '6px' }}>
                     {selectedStudy.clinicalHistory}
                   </p>

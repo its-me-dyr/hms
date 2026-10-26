@@ -7,11 +7,10 @@
  * - Pathologist electronic sign-off verification
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   FileCheck,
   Search,
-  Filter,
   RefreshCw,
   Eye,
   Printer,
@@ -24,6 +23,7 @@ export default function LabReportsTab({ activeReport }) {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [selectedReport, setSelectedReport] = useState(activeReport || null);
 
@@ -33,10 +33,10 @@ export default function LabReportsTab({ activeReport }) {
     }
   }, [activeReport]);
 
-  const fetchReports = () => {
+  const fetchReports = useCallback(() => {
     setLoading(true);
     labService.getReports({
-      search: search || undefined,
+      search: activeSearch || undefined,
       category: categoryFilter !== 'ALL' ? categoryFilter : undefined,
     })
       .then((res) => {
@@ -48,15 +48,15 @@ export default function LabReportsTab({ activeReport }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [activeSearch, categoryFilter]);
 
   useEffect(() => {
     fetchReports();
-  }, [categoryFilter]);
+  }, [fetchReports]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchReports();
+    setActiveSearch(search);
   };
 
   return (

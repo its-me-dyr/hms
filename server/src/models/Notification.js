@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const notificationSchema = new mongoose.Schema(
   {
     recipient: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.Mixed,
       ref: 'User',
       required: [true, 'Recipient reference is required'],
       index: true,
@@ -26,9 +26,24 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['appointment', 'prescription', 'lab', 'radiology', 'billing', 'system'],
+      enum: ['appointment', 'prescription', 'lab', 'radiology', 'billing', 'system', 'security', 'hospital', 'admin'],
       default: 'system',
       index: true,
+    },
+    module: {
+      type: String,
+      default: null,
+      index: true,
+    },
+    priority: {
+      type: String,
+      enum: ['low', 'medium', 'high', 'urgent'],
+      default: 'medium',
+      index: true,
+    },
+    link: {
+      type: String,
+      default: null,
     },
     relatedId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -42,6 +57,12 @@ const notificationSchema = new mongoose.Schema(
     readAt: {
       type: Date,
       default: null,
+    },
+    hospital: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'HospitalSetting',
+      default: null,
+      index: true,
     },
   },
   {

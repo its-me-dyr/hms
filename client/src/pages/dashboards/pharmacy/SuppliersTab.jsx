@@ -7,7 +7,7 @@
  * - Add Supplier modal for provisioning new distributor relationships
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Building2,
   Search,
@@ -15,11 +15,6 @@ import {
   RefreshCw,
   Eye,
   X,
-  Phone,
-  Mail,
-  MapPin,
-  CreditCard,
-  CheckCircle2,
   AlertCircle,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
@@ -29,6 +24,7 @@ export default function SuppliersTab({ onNavigateTab }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [selectedSup, setSelectedSup] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -44,10 +40,10 @@ export default function SuppliersTab({ onNavigateTab }) {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchSuppliers = () => {
+  const fetchSuppliers = useCallback(() => {
     setLoading(true);
     setError('');
-    pharmacyService.getSuppliers({ search })
+    pharmacyService.getSuppliers({ search: activeSearch })
       .then((res) => {
         const list = res.data || [];
         setSuppliers(Array.isArray(list) ? list : []);
@@ -59,15 +55,15 @@ export default function SuppliersTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [activeSearch]);
 
   useEffect(() => {
     fetchSuppliers();
-  }, []);
+  }, [fetchSuppliers]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchSuppliers();
+    setActiveSearch(search);
   };
 
   const handleAddSubmit = (e) => {

@@ -11,13 +11,11 @@ const departmentSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'Department name is required'],
-      unique: true,
       trim: true,
     },
     code: {
       type: String,
       required: [true, 'Department code is required'],
-      unique: true,
       uppercase: true,
       trim: true, // e.g. CARD, PEDI, NEUR
     },
@@ -47,10 +45,20 @@ const departmentSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    hospital: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'HospitalSetting',
+      default: null,
+      index: true,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+// Unique code and name per hospital (compound index)
+departmentSchema.index({ hospital: 1, code: 1 }, { unique: true });
+departmentSchema.index({ hospital: 1, name: 1 });
 
 module.exports = mongoose.model('Department', departmentSchema);

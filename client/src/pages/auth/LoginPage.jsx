@@ -14,7 +14,7 @@
  */
 
 import { useState } from 'react';
-import { useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { useTheme } from '../../context/useTheme';
 import { authService } from '../../services/auth.service';
@@ -63,7 +63,7 @@ const HOSPITAL_DEPARTMENTS = [
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, loading: authLoading, login } = useAuth();
+  const { user, isAuthenticated, loading: authLoading, login } = useAuth();
   const { effectiveTheme, setTheme } = useTheme();
 
   const [rememberMe, setRememberMe] = useState(() => {
@@ -71,7 +71,7 @@ export default function LoginPage() {
   });
 
   const [formData, setFormData] = useState(() => ({
-    email: localStorage.getItem('hms_remember_email') || '',
+    email: location.state?.prefilledEmail || localStorage.getItem('hms_remember_email') || '',
     password: '',
   }));
 
@@ -111,8 +111,11 @@ export default function LoginPage() {
   const [resubmitDocs, setResubmitDocs] = useState([]);
   const [uploadingDoc, setUploadingDoc] = useState(false);
 
-  // If already authenticated, redirect to dashboard
+  // If already authenticated, redirect to appropriate destination
   if (!authLoading && isAuthenticated) {
+    if (user?.mustChangePassword) {
+      return <Navigate to="/force-change-password" replace />;
+    }
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -142,8 +145,12 @@ export default function LoginPage() {
         }
 
         login(payload.user, payload.accessToken, payload.refreshToken);
-        const from = location.state?.from?.pathname || '/dashboard';
-        navigate(from, { replace: true });
+        if (payload.user?.mustChangePassword) {
+          navigate('/force-change-password', { replace: true });
+        } else {
+          const from = location.state?.from?.pathname || '/dashboard';
+          navigate(from, { replace: true });
+        }
       } else {
         setError('Login failed: Invalid server response.');
       }
@@ -394,7 +401,7 @@ export default function LoginPage() {
                 <div>
                   <strong style={{ display: 'block' }}>Your verification application was rejected.</strong>
                   {rejectionReason && (
-                    <div style={{ marginTop: '0.35rem', fontSize: '0.8125rem', color: '#b91c1c', background: '#ffffff', padding: '0.45rem 0.65rem', borderRadius: '6px', border: '1px solid #fecaca' }}>
+                    <div style={{ marginTop: '0.35rem', fontSize: '0.8125rem', color: '#ef4444', background: 'var(--bg-card)', padding: '0.45rem 0.65rem', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
                       <strong>Reason:</strong> {rejectionReason}
                     </div>
                   )}
@@ -669,9 +676,9 @@ export default function LoginPage() {
                   </div>
 
                   {/* Document Upload Section */}
-                  <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ background: 'var(--bg-surface)', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem' }}>
-                      <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#0f172a' }}>
+                      <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-primary)' }}>
                         Replace / Add Corrected Documents (PDF/Images, Max 5MB)
                       </span>
                       <label
@@ -703,14 +710,14 @@ export default function LoginPage() {
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'space-between',
-                              background: '#ffffff',
-                              border: '1px solid #e2e8f0',
+                              background: 'var(--bg-card)',
+                              border: '1px solid var(--border-color)',
                               borderRadius: '6px',
                               padding: '0.4rem 0.65rem',
                               fontSize: '0.78rem',
                             }}
                           >
-                            <span style={{ fontWeight: 500, color: '#0f172a' }}>{doc.originalName}</span>
+                            <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{doc.originalName}</span>
                             <button
                               type="button"
                               onClick={() => removeResubmitDoc(idx)}

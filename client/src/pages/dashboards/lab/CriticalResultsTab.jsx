@@ -7,7 +7,7 @@
  * - Immediate audit acknowledgement protocol
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   AlertTriangle,
   ShieldAlert,
@@ -15,13 +15,7 @@ import {
   RefreshCw,
   Search,
   Eye,
-  Bell,
-  Clock,
-  User,
-  Stethoscope,
   X,
-  FileCheck,
-  ChevronRight,
 } from 'lucide-react';
 import { labService } from '../../../services/lab.service';
 
@@ -37,7 +31,7 @@ export default function CriticalResultsTab({ onNavigateTab }) {
   const [ackNotes, setAckNotes] = useState('Critical finding verbally communicated and recorded in laboratory logbook.');
   const [actionLoading, setActionLoading] = useState(false);
 
-  const fetchCriticals = () => {
+  const fetchCriticals = useCallback(() => {
     setLoading(true);
     labService.getCriticalResults()
       .then((res) => {
@@ -50,11 +44,11 @@ export default function CriticalResultsTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchCriticals();
-  }, []);
+  }, [fetchCriticals]);
 
   const handleAcknowledge = async () => {
     if (!selectedAlert) return;

@@ -285,8 +285,8 @@ export default function NurseCareTasksTab() {
 
       {/* Add Task Form Collapsible - Expands Across Full Width */}
       {showAddForm && (
-        <form onSubmit={handleAddTask} className="nurse-card" style={{ marginBottom: '1.5rem', background: '#f8fafc', width: '100%' }}>
-          <h3 style={{ margin: '0 0 1.15rem', fontSize: '1.05rem', color: '#0f172a', fontWeight: 700 }}>
+        <form onSubmit={handleAddTask} className="nurse-card" style={{ marginBottom: '1.5rem', background: 'var(--bg-surface)', width: '100%' }}>
+          <h3 style={{ margin: '0 0 1.15rem', fontSize: '1.05rem', color: 'var(--text-primary)', fontWeight: 700 }}>
             Create New Shift Nursing Task
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>

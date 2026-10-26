@@ -14,17 +14,11 @@ import { useState, useEffect } from 'react';
 import {
   CreditCard,
   Search,
-  DollarSign,
   CheckCircle2,
-  Clock,
   AlertCircle,
   Printer,
   Eye,
   RefreshCw,
-  Plus,
-  Building,
-  User,
-  ShieldCheck,
 } from 'lucide-react';
 import { receptionService } from '../../../services/reception.service';
 
@@ -307,7 +301,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
                   return (
                     <tr key={b._id}>
                       <td>
-                        <div style={{ fontWeight: 700, color: '#0f172a' }}>
+                        <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                           {b.billNumber || b._id?.slice(-8).toUpperCase()}
                         </div>
                         <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
@@ -316,7 +310,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
                       </td>
                       <td>
                         <div
-                          style={{ fontWeight: 600, color: '#0f172a', cursor: 'pointer' }}
+                          style={{ fontWeight: 600, color: 'var(--text-primary)', cursor: 'pointer' }}
                           onClick={() => b.patient && onSelectPatient && onSelectPatient(b.patient)}
                         >
                           {pName}
@@ -330,7 +324,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
                           {b.createdAt ? new Date(b.createdAt).toLocaleDateString() : 'Today'}
                         </div>
                       </td>
-                      <td style={{ fontWeight: 700, color: '#0f172a' }}>
+                      <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                         ₹ {total.toLocaleString()}
                       </td>
                       <td style={{ color: '#16a34a', fontWeight: 600 }}>
@@ -408,7 +402,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
               {/* Patient info */}
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.85rem', backgroundColor: '#f8fafc', borderRadius: '8px', marginBottom: '1rem' }}>
                 <div>
-                  <div style={{ fontWeight: 700, color: '#0f172a' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                     {selectedBill.patient?.firstName} {selectedBill.patient?.lastName}
                   </div>
                   <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
@@ -417,7 +411,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Date Issued</div>
-                  <div style={{ fontWeight: 600, color: '#0f172a' }}>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                     {selectedBill.createdAt ? new Date(selectedBill.createdAt).toLocaleDateString() : 'Today'}
                   </div>
                 </div>
@@ -461,7 +455,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
                   <strong style={{ color: '#16a34a' }}>₹ {selectedBill.paidAmount || 0}</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.1rem', fontWeight: 800 }}>
-                  <span style={{ color: '#0f172a' }}>Balance Due:</span>
+                  <span style={{ color: 'var(--text-primary)' }}>Balance Due:</span>
                   <span style={{ color: '#dc2626' }}>
                     ₹ {Math.max(0, (selectedBill.totalAmount || 0) - (selectedBill.paidAmount || 0))}
                   </span>
@@ -513,7 +507,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
               <div className="rec-modal-body">
                 <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '1.25rem' }}>
                   Receiving payment for{' '}
-                  <strong style={{ color: '#0f172a' }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>
                     {paymentModal.bill?.patient?.firstName} {paymentModal.bill?.patient?.lastName}
                   </strong>{' '}
                   (Invoice: {paymentModal.bill?.billNumber || paymentModal.bill?._id})
@@ -582,7 +576,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
           <div className="rec-modal-card" style={{ maxWidth: '480px', padding: 0 }} onClick={(e) => e.stopPropagation()}>
             <div className="rec-print-area" style={{ padding: '2rem', backgroundColor: 'var(--bg-card)', borderRadius: '12px' }}>
               <div style={{ textAlign: 'center', borderBottom: '2px solid #0891b2', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
-                <div style={{ fontWeight: 800, fontSize: '1.2rem', color: '#0f172a' }}>HEALTHCARE MEDICAL SYSTEM</div>
+                <div style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-primary)' }}>HEALTHCARE MEDICAL SYSTEM</div>
                 <div style={{ fontSize: '0.8rem', color: '#64748b' }}>OFFICIAL FRONT-DESK PAYMENT RECEIPT</div>
                 <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Receipt: {receiptModal.receiptNumber}</div>
               </div>
@@ -606,7 +600,7 @@ export default function BillingCoordinationTab({ onSelectPatient }) {
                 </div>
                 <hr style={{ border: 'none', borderTop: '1px dashed #e2e8f0', margin: '0.25rem 0' }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.15rem', fontWeight: 800 }}>
-                  <span style={{ color: '#0f172a' }}>Amount Paid:</span>
+                  <span style={{ color: 'var(--text-primary)' }}>Amount Paid:</span>
                   <span style={{ color: '#16a34a' }}>₹ {receiptModal.amountPaid.toLocaleString()}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>

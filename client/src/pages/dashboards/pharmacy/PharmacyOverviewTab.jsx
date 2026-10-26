@@ -7,7 +7,7 @@
  * - Today's Dispensing feed, recent sales, and fast action triggers
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Pill,
   Clock,
@@ -21,11 +21,9 @@ import {
   Eye,
   ArrowRight,
   TrendingUp,
-  Package,
   X,
-  User,
-  Stethoscope,
   ChevronRight,
+  AlertCircle,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
@@ -35,7 +33,7 @@ export default function PharmacyOverviewTab({ user, onNavigateTab, onSelectPresc
   const [error, setError] = useState('');
   const [selectedRx, setSelectedRx] = useState(null);
 
-  const fetchOverview = () => {
+  const fetchOverview = useCallback(() => {
     setLoading(true);
     setError('');
     pharmacyService.getDashboard()
@@ -49,11 +47,11 @@ export default function PharmacyOverviewTab({ user, onNavigateTab, onSelectPresc
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchOverview();
-  }, []);
+  }, [fetchOverview]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -116,6 +114,14 @@ export default function PharmacyOverviewTab({ user, onNavigateTab, onSelectPresc
           </div>
         </div>
       </div>
+
+      {/* ── Error Alert ── */}
+      {error && (
+        <div style={{ padding: '0.85rem 1rem', background: '#fee2e2', borderRadius: '8px', color: '#b91c1c', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <AlertCircle size={16} />
+          <span>{error}</span>
+        </div>
+      )}
 
       {/* ── 6 KPI Cards Grid ── */}
       <div className="pharm-kpi-grid">

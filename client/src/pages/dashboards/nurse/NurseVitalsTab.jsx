@@ -281,7 +281,7 @@ export default function NurseVitalsTab() {
             <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>
               Recorded Today
             </div>
-            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a' }}>
+            <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)' }}>
               {vitalsList.length} Rounds
             </div>
           </div>
@@ -365,13 +365,13 @@ export default function NurseVitalsTab() {
                   return (
                     <tr key={v.id} style={{ background: v.alert ? '#fffbfa' : undefined }}>
                       <td>
-                        <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.82rem' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.82rem' }}>
                           {v.time}
                         </span>
                         <div style={{ fontSize: '0.7rem', color: '#64748b' }}>{v.date}</div>
                       </td>
                       <td>
-                        <div style={{ fontWeight: 600, color: '#0f172a' }}>{v.patientName}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{v.patientName}</div>
                         <div style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 600 }}>{v.roomBed}</div>
                       </td>
                       <td>

@@ -132,7 +132,7 @@ export default function AccountSecuritySettings() {
               <UserCheck size={14} /> Account Role
             </div>
             <div className="settings-meta-val" style={{ textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--color-primary)' }}>
-              {String(user?.role || 'User').replace(/_/g, ' ')}
+              {(typeof user?.role === 'string' ? user.role : (user?.roleName || user?.role?.displayName || 'User')).replace(/_/g, ' ')}
             </div>
           </div>
 

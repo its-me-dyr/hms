@@ -41,7 +41,13 @@ export default function LandingNavbar() {
               onClick={() => navigate('/dashboard')}
               className="btn btn--primary"
             >
-              <span>Dashboard ({user?.role || 'User'})</span>
+              <span>
+                Dashboard (
+                {typeof user?.role === 'object' && user?.role !== null
+                  ? user.role.displayName || user.role.name || 'User'
+                  : user?.roleName || user?.role || 'User'}
+                )
+              </span>
               <ArrowRight size={16} />
             </button>
           ) : (

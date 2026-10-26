@@ -7,20 +7,14 @@
  * - Quick jump to patient orders and verified reports
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Users,
   Search,
   RefreshCw,
   Eye,
-  User,
   FlaskConical,
-  FileCheck,
-  Calendar,
-  Phone,
-  Mail,
   X,
-  ChevronRight,
   Droplet,
 } from 'lucide-react';
 import { labService } from '../../../services/lab.service';
@@ -29,13 +23,14 @@ export default function LabPatientsTab({ onNavigateTab }) {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [patientHistory, setPatientHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
 
-  const fetchPatients = () => {
+  const fetchPatients = useCallback(() => {
     setLoading(true);
-    labService.getPatients({ search: search || undefined })
+    labService.getPatients({ search: activeSearch || undefined })
       .then((res) => {
         setPatients(res.data || []);
       })
@@ -45,15 +40,15 @@ export default function LabPatientsTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [activeSearch]);
 
   useEffect(() => {
     fetchPatients();
-  }, []);
+  }, [fetchPatients]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchPatients();
+    setActiveSearch(search);
   };
 
   const openPatientHistory = (pat) => {

@@ -81,7 +81,7 @@ export default function NurseHandoverTab({ user }) {
         className="nurse-card"
         style={{
           padding: '1.25rem 1.5rem',
-          background: '#f8fafc',
+          background: 'var(--bg-surface)',
           marginBottom: '1.5rem',
         }}
       >
@@ -90,7 +90,7 @@ export default function NurseHandoverTab({ user }) {
             <span style={{ color: '#64748b', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>
               Ward / Clinical Unit
             </span>
-            <div style={{ fontWeight: 700, color: '#0f172a', marginTop: '0.2rem' }}>
+            <div style={{ fontWeight: 700, color: 'var(--text-primary)', marginTop: '0.2rem' }}>
               Ward 3A • Medical-Surgical Floor
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function NurseHandoverTab({ user }) {
                 padding: '0.25rem 0.5rem',
                 fontSize: '0.85rem',
                 fontWeight: 600,
-                color: '#0f172a',
+                color: 'var(--text-primary)',
                 height: 'auto',
               }}
             />
@@ -167,11 +167,11 @@ export default function NurseHandoverTab({ user }) {
                 >
                   {p.bed}
                 </span>
-                <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#0f172a' }}>
+                <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>
                   {p.name}
                 </span>
                 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                  {p.patientId} • {p.age}y {p.gender[0]} • Code: <strong style={{ color: '#0f172a' }}>{p.codeStatus}</strong>
+                  {p.patientId} • {p.age}y {p.gender[0]} • Code: <strong style={{ color: 'var(--text-primary)' }}>{p.codeStatus}</strong>
                 </span>
               </div>
               <span className={`nurse-badge nurse-badge--${p.acuity.toLowerCase().replace(/[^a-z]/g, '')}`}>

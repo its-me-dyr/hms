@@ -8,38 +8,7 @@ import api from './api';
 
 export const authService = {
   /**
-   * Request 6-digit registration OTP (Step 1)
-   */
-  async requestOtp(formData) {
-    const response = await api.post('/auth/register/request-otp', formData);
-    return response?.data || response;
-  },
-
-  /**
-   * Verify 6-digit registration OTP and finalize account (Step 2)
-   */
-  async verifyOtp(email, otp) {
-    const response = await api.post('/auth/register/verify-otp', { email, otp });
-    return response?.data || response;
-  },
-
-  /**
-   * Resend fresh OTP
-   */
-  async resendOtp(email) {
-    const response = await api.post('/auth/register/resend-otp', { email });
-    return response?.data || response;
-  },
-
-  /**
-   * Legacy register endpoint
-   */
-  async register(patientData) {
-    return this.requestOtp({ ...patientData, role: 'patient' });
-  },
-
-  /**
-   * Upload single verification document before OTP registration
+   * Upload single verification document before registration / application
    */
   async uploadDocument(file, documentName = '', documentType = 'other') {
     const formData = new FormData();
@@ -162,6 +131,27 @@ export const authService = {
    */
   isAuthenticated() {
     return !!localStorage.getItem('hms_access_token');
+  },
+
+  /**
+   * Change password for authenticated user (used for forced password change or profile update)
+   */
+  async changePassword(currentPassword, newPassword) {
+    const response = await api.put('/auth/change-password', {
+      currentPassword,
+      newPassword,
+    });
+    const payload = response?.data || response;
+    if (payload?.accessToken) {
+      localStorage.setItem('hms_access_token', payload.accessToken);
+    }
+    if (payload?.refreshToken) {
+      localStorage.setItem('hms_refresh_token', payload.refreshToken);
+    }
+    if (payload?.user) {
+      localStorage.setItem('hms_user', JSON.stringify(payload.user));
+    }
+    return payload;
   },
 };
 

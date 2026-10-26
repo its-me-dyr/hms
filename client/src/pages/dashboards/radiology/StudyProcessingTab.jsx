@@ -413,7 +413,7 @@ export default function StudyProcessingTab({ activeStudy, onNavigateTab }) {
               </div>
 
               {/* Contrast Section */}
-              <div style={{ marginTop: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+              <div style={{ marginTop: '1rem', padding: '1rem', background: 'var(--bg-surface)', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', marginBottom: '0.5rem' }}>
                   <input
                     type="checkbox"
@@ -468,7 +468,7 @@ export default function StudyProcessingTab({ activeStudy, onNavigateTab }) {
         ) : (
           <div className="lab-card" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
             <Image size={40} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-            <p style={{ fontWeight: 600, color: '#475569' }}>Select a study from the acquisition worklist to open console.</p>
+            <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Select a study from the acquisition worklist to open console.</p>
           </div>
         )}
 

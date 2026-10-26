@@ -9,27 +9,24 @@
  * - Expiration risk analysis and warehouse valuation metrics
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
-  FileText,
   RefreshCw,
-  Calendar,
-  DollarSign,
   TrendingUp,
   Pill,
   AlertTriangle,
-  Package,
   Printer,
+  AlertCircle,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
-export default function ReportsTab({ onNavigateTab }) {
+export default function ReportsTab({ onNavigateTab: _onNavigateTab }) {
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [dateRange, setDateRange] = useState('month');
 
-  const fetchReports = () => {
+  const fetchReports = useCallback(() => {
     setLoading(true);
     setError('');
     pharmacyService.getReports({ range: dateRange })
@@ -43,11 +40,11 @@ export default function ReportsTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [dateRange]);
 
   useEffect(() => {
     fetchReports();
-  }, [dateRange]);
+  }, [fetchReports]);
 
   const sales = reportData?.salesSummary || {
     totalSalesAmount: 18450.00,
@@ -102,6 +99,33 @@ export default function ReportsTab({ onNavigateTab }) {
             <span>Print Report</span>
           </button>
         </div>
+      </div>
+
+      {/* ── Error Banner ── */}
+      {error && (
+        <div style={{ padding: '0.85rem 1rem', background: '#fee2e2', borderRadius: '8px', color: '#b91c1c', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <AlertCircle size={16} />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* ── Date Range Bar ── */}
+      <div className="pharm-filter-bar" style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.5rem' }}>
+        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)', marginRight: '0.5rem' }}>Period:</span>
+        {[
+          { id: 'week', label: 'Last 7 Days' },
+          { id: 'month', label: 'This Month' },
+          { id: 'year', label: 'This Year' },
+        ].map((range) => (
+          <button
+            key={range.id}
+            type="button"
+            className={`pharm-btn pharm-btn--sm ${dateRange === range.id ? 'pharm-btn--primary' : 'pharm-btn--secondary'}`}
+            onClick={() => setDateRange(range.id)}
+          >
+            {range.label}
+          </button>
+        ))}
       </div>
 
       {/* ── Top Financial KPI Cards ── */}

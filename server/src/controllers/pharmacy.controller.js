@@ -513,55 +513,7 @@ class PharmacyController {
           }));
         }
       } catch (dbErr) {
-        logger.warn('Could not query Prescription DB for metrics, using fallback mock:', dbErr.message);
-      }
-
-      // Fallback seed prescriptions if DB was empty
-      if (recentPrescriptions.length === 0) {
-        recentPrescriptions = [
-          {
-            id: 'rx-mock-1',
-            prescriptionId: 'RX-2026-891',
-            patient: 'Eleanor Vance',
-            patientId: 'HMS-P-1001',
-            doctor: 'Dr. Sarah Jenkins',
-            date: 'Today, 09:30 AM',
-            items: 2,
-            medications: [
-              { name: 'Amoxicillin & Clavulanate', dosage: '625 mg', frequency: 'Twice daily', duration: '5 days', instructions: 'Take with food' },
-              { name: 'Pantoprazole Sodium', dosage: '40 mg', frequency: 'Once daily', duration: '5 days', instructions: 'Take 30 min before breakfast' },
-            ],
-            status: 'Pending',
-          },
-          {
-            id: 'rx-mock-2',
-            prescriptionId: 'RX-2026-892',
-            patient: 'Thomas Anderson',
-            patientId: 'HMS-P-1002',
-            doctor: 'Dr. Robert Chen',
-            date: 'Today, 10:15 AM',
-            items: 1,
-            medications: [
-              { name: 'Atorvastatin Calcium', dosage: '20 mg', frequency: 'Once daily at bedtime', duration: '30 days', instructions: 'Avoid grapefruit juice' },
-            ],
-            status: 'Pending',
-          },
-          {
-            id: 'rx-mock-3',
-            prescriptionId: 'RX-2026-893',
-            patient: 'Arthur Dent',
-            patientId: 'HMS-P-1003',
-            doctor: 'Dr. Marcus Brody',
-            date: 'Today, 11:00 AM',
-            items: 1,
-            medications: [
-              { name: 'Paracetamol / Acetaminophen', dosage: '650 mg', frequency: 'SOS (as needed)', duration: '3 days', instructions: 'Max 3 tablets in 24 hours' },
-            ],
-            status: 'Dispensed',
-          },
-        ];
-        totalPrescriptionsToday = 8;
-        pendingDispensing = 5;
+        logger.warn('Could not query Prescription DB for metrics:', dbErr.message);
       }
 
       // 2. Inventory Metrics

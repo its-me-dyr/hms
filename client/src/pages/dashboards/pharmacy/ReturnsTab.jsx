@@ -7,10 +7,9 @@
  * - Process Patient Return modal with automatic inventory rollback
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   RotateCcw,
-  Search,
   Plus,
   RefreshCw,
   X,
@@ -18,11 +17,10 @@ import {
   CheckCircle2,
   Building2,
   User,
-  Package,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
-export default function ReturnsTab({ onNavigateTab }) {
+export default function ReturnsTab({ onNavigateTab: _onNavigateTab }) {
   const [returns, setReturns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -41,7 +39,7 @@ export default function ReturnsTab({ onNavigateTab }) {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchReturns = () => {
+  const fetchReturns = useCallback(() => {
     setLoading(true);
     setError('');
     pharmacyService.getReturns()
@@ -56,11 +54,11 @@ export default function ReturnsTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchReturns();
-  }, []);
+  }, [fetchReturns]);
 
   const handleSubmitReturn = (e) => {
     e.preventDefault();

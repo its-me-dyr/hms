@@ -3,24 +3,26 @@
  * 
  * Secure modal dialog for Hospital Admin and Super Admin to provision
  * staff accounts (Doctor, Nurse, Pharmacist, Lab Technician, Radiologist,
- * Receptionist, Billing Staff, etc.) with credentials and assigned role.
+ * Receptionist, Billing Staff, etc.).
+ * 
+ * Password Architecture:
+ * - Manual Temporary Password.
+ * - Hospital Admin enters the temporary password directly in the Add Staff form.
+ * - Backend securely hashes it with bcrypt and sets mustChangePassword = true.
+ * - Staff member logs in using Staff Email Address and temporary password.
+ * - Staff member is forced to change the temporary password on first login.
  */
 
 import { useState } from 'react';
 import {
   UserPlus,
   X,
+  CheckCircle2,
+  AlertCircle,
+  KeyRound,
   Eye,
   EyeOff,
   RefreshCw,
-  CheckCircle2,
-  AlertCircle,
-  Shield,
-  Stethoscope,
-  Building2,
-  Mail,
-  Phone,
-  Key,
 } from 'lucide-react';
 import { superadminService } from '../../services/superadmin.service';
 import { hospitalAdminService } from '../../services/hospitalAdmin.service';
@@ -55,7 +57,7 @@ const STAFF_ROLES = [
   { value: 'BILLING_STAFF', label: 'Billing & Cashier Staff', dept: 'Billing & Accounts' },
 ];
 
-function generateRandomPassword() {
+function generateQuickPassword() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%^&*';
   let pwd = 'Hms@';
   for (let i = 0; i < 8; i++) {
@@ -83,11 +85,11 @@ export default function StaffProvisioningModal({
     specialization: isHospitalAdminOnly ? 'Hospital Administration' : '',
     qualification: '',
     licenseNumber: '',
-    password: generateRandomPassword(),
+    password: '',
     status: 'active',
   });
 
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successInfo, setSuccessInfo] = useState(null);
@@ -108,27 +110,42 @@ export default function StaffProvisioningModal({
   };
 
   const handleGeneratePassword = () => {
-    setFormData((prev) => ({ ...prev, password: generateRandomPassword() }));
+    const generated = generateQuickPassword();
+    setFormData((prev) => ({ ...prev, password: generated }));
     setShowPassword(true);
+    setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
+
+    const cleanEmail = formData.email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      setError('Please enter a valid Staff Email Address (e.g. doctor@hospital.org).');
+      return;
+    }
+
+    if (!formData.password || formData.password.trim().length < 8) {
+      setError('Please enter a temporary password of at least 8 characters.');
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const payload = {
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
-        email: formData.email.trim().toLowerCase(),
+        email: cleanEmail,
         phone: formData.phone.trim(),
         role: isHospitalAdminOnly ? 'HOSPITAL_ADMIN' : formData.role,
         department: formData.department,
         specialization: formData.specialization.trim(),
         qualification: formData.qualification.trim(),
         licenseNumber: formData.licenseNumber.trim(),
-        password: formData.password,
+        password: formData.password.trim(),
         status: formData.status,
       };
 
@@ -138,11 +155,10 @@ export default function StaffProvisioningModal({
 
       setSuccessInfo({
         user: createdUser,
-        credentials: {
-          email: payload.email,
-          password: payload.password,
-          role: payload.role,
-        },
+        role: payload.role,
+        department: payload.department,
+        email: payload.email,
+        name: `${payload.firstName} ${payload.lastName}`.trim(),
       });
 
       if (onSuccess) {
@@ -159,6 +175,7 @@ export default function StaffProvisioningModal({
   const handleClose = () => {
     setSuccessInfo(null);
     setError('');
+    setShowPassword(false);
     onClose();
   };
 
@@ -193,7 +210,7 @@ export default function StaffProvisioningModal({
               <p style={{ margin: '0.15rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                 {isHospitalAdminOnly
                   ? 'Create an authorized Hospital Administrator account to manage hospital operations and staff.'
-                  : 'Create a hospital staff user profile and assign role-based access credentials.'}
+                  : 'Enter staff details and assign a temporary login password.'}
               </p>
             </div>
           </div>
@@ -232,12 +249,10 @@ export default function StaffProvisioningModal({
                 : 'Staff Account Provisioned Successfully'}
             </h4>
             <p style={{ margin: '0 0 1.25rem 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              {isHospitalAdminOnly
-                ? 'The Hospital Administrator account and credentials have been established.'
-                : 'The staff profile and database credentials have been established. Provide these login details to the staff member.'}
+              The staff profile and database records have been established.
             </p>
 
-            {/* CREDENTIALS CARD */}
+            {/* DETAILS CARD */}
             <div
               style={{
                 background: 'var(--bg-surface)',
@@ -250,35 +265,43 @@ export default function StaffProvisioningModal({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>Full Name:</span>
-                <strong style={{ color: 'var(--text-primary)' }}>{successInfo.user?.name || `${formData.firstName} ${formData.lastName}`}</strong>
+                <strong style={{ color: 'var(--text-primary)' }}>{successInfo.name}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>Assigned Role:</span>
-                <span className="badge badge--primary">{successInfo.credentials.role}</span>
+                <span className="badge badge--primary">{successInfo.role}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>Department:</span>
-                <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{formData.department}</span>
+                <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{successInfo.department}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Login Email / Username:</span>
-                <strong style={{ color: 'var(--color-primary)' }}>{successInfo.credentials.email}</strong>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', fontSize: '0.85rem' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Staff Email Address:</span>
+                <strong style={{ color: 'var(--color-primary)' }}>{successInfo.email}</strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Initial Password:</span>
-                <span
+
+              {/* CREDENTIALS / NEXT STEPS NOTICE */}
+              <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}>
+                <div
                   style={{
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    background: 'var(--bg-card)',
-                    border: '1px solid var(--border-color)',
-                    padding: '0.2rem 0.5rem',
-                    borderRadius: '4px',
-                    color: 'var(--text-primary)',
+                    background: 'rgba(8, 145, 178, 0.08)',
+                    border: '1px solid rgba(8, 145, 178, 0.25)',
+                    borderRadius: '8px',
+                    padding: '0.85rem',
+                    display: 'flex',
+                    gap: '0.65rem',
+                    alignItems: 'flex-start',
                   }}
                 >
-                  {successInfo.credentials.password}
-                </span>
+                  <KeyRound size={18} color="#0891b2" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <div style={{ fontSize: '0.8rem', lineHeight: 1.45, color: 'var(--text-primary)' }}>
+                    <strong>Account Ready for First Login:</strong>
+                    <div style={{ marginTop: '0.2rem', color: 'var(--text-secondary)' }}>
+                      Provide the <strong>Staff Email Address</strong> (<code>{successInfo.email}</code>) and temporary password directly to the staff member.
+                      They can log in immediately at the HMS login page and will be required to change their temporary password upon first login before accessing their dashboard.
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -292,18 +315,19 @@ export default function StaffProvisioningModal({
                     lastName: '',
                     email: '',
                     phone: '',
-                    role: 'DOCTOR',
-                    department: 'General Medicine',
-                    specialization: '',
+                    role: isHospitalAdminOnly ? 'HOSPITAL_ADMIN' : 'DOCTOR',
+                    department: isHospitalAdminOnly ? 'Hospital Administration' : 'General Medicine',
+                    specialization: isHospitalAdminOnly ? 'Hospital Administration' : '',
                     qualification: '',
                     licenseNumber: '',
-                    password: generateRandomPassword(),
+                    password: '',
                     status: 'active',
                   });
+                  setShowPassword(false);
                 }}
                 className="btn btn--outline"
               >
-                Provision Another Staff
+                {isHospitalAdminOnly ? 'Provision Another Admin' : 'Provision Another Staff'}
               </button>
               <button type="button" onClick={handleClose} className="btn btn--primary">
                 Done
@@ -354,19 +378,17 @@ export default function StaffProvisioningModal({
               {/* SECTION 2: CONTACT */}
               <div className="hms-form-row">
                 <div className="form-group" style={{ margin: 0 }}>
-                  <label className="form-label" style={{ fontSize: '0.8rem' }}>Hospital Email Address *</label>
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type="email"
-                      required
-                      name="email"
-                      placeholder="e.g. j.smith@hospital.org"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="form-input"
-                      style={{ height: '38px', fontSize: '0.85rem' }}
-                    />
-                  </div>
+                  <label className="form-label" style={{ fontSize: '0.8rem' }}>Staff Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    name="email"
+                    placeholder="e.g. doctor@hospital.org"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="form-input"
+                    style={{ height: '38px', fontSize: '0.85rem' }}
+                  />
                 </div>
                 <div className="form-group" style={{ margin: 0 }}>
                   <label className="form-label" style={{ fontSize: '0.8rem' }}>Contact Phone</label>
@@ -393,7 +415,7 @@ export default function StaffProvisioningModal({
                     value={formData.role}
                     onChange={handleChange}
                     className="form-input"
-                    style={{ height: '38px', fontSize: '0.85rem' }}
+                    style={{ height: '38px', padding: '0 1.75rem 0 0.85rem', fontSize: '0.85rem', lineHeight: 'normal', boxSizing: 'border-box' }}
                     disabled={isHospitalAdminOnly}
                   >
                     {isHospitalAdminOnly ? (
@@ -412,7 +434,7 @@ export default function StaffProvisioningModal({
                     value={formData.department}
                     onChange={handleChange}
                     className="form-input"
-                    style={{ height: '38px', fontSize: '0.85rem' }}
+                    style={{ height: '38px', padding: '0 1.75rem 0 0.85rem', fontSize: '0.85rem', lineHeight: 'normal', boxSizing: 'border-box' }}
                   >
                     {DEPARTMENTS.map((d) => (
                       <option key={d} value={d}>{d}</option>
@@ -449,7 +471,7 @@ export default function StaffProvisioningModal({
                 </div>
               </div>
 
-              {/* SECTION 5: INITIAL CREDENTIALS & STATUS */}
+              {/* SECTION 5: MANUAL TEMPORARY PASSWORD */}
               <div
                 style={{
                   background: 'var(--bg-surface)',
@@ -459,57 +481,79 @@ export default function StaffProvisioningModal({
                   marginTop: '0.25rem',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <label className="form-label" style={{ margin: 0, fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                    Assigned Password / Temporary Credentials *
-                  </label>
-                  <button
-                    type="button"
-                    onClick={handleGeneratePassword}
-                    className="btn btn--outline btn--sm"
-                    style={{ fontSize: '0.72rem', padding: '0.2rem 0.5rem', height: '26px' }}
-                  >
-                    <RefreshCw size={12} />
-                    <span>Generate Random</span>
-                  </button>
+                <div style={{ marginBottom: '0.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                    <label className="form-label" style={{ margin: 0, fontSize: '0.8rem', fontWeight: 600 }}>
+                      Temporary Login Password *
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleGeneratePassword}
+                      className="btn btn--outline btn--sm"
+                      style={{ fontSize: '0.72rem', padding: '0.15rem 0.5rem', height: '24px', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                      title="Generate a random password suggestion"
+                    >
+                      <RefreshCw size={11} />
+                      <span>Suggest Strong Password</span>
+                    </button>
+                  </div>
+
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      name="password"
+                      placeholder="Enter temporary password (min 8 chars)"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="form-input"
+                      style={{
+                        height: '38px',
+                        fontSize: '0.85rem',
+                        paddingRight: '38px',
+                        fontFamily: showPassword ? 'monospace' : 'inherit',
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: 'absolute',
+                        right: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--text-secondary)',
+                        cursor: 'pointer',
+                        padding: '2px',
+                      }}
+                      aria-label="Toggle password visibility"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  <div style={{ fontSize: '0.725rem', color: 'var(--text-secondary)', marginTop: '0.35rem', lineHeight: 1.35 }}>
+                    This temporary password will be securely hashed with bcrypt. The staff member will be required to change it upon first login before accessing their dashboard.
+                  </div>
                 </div>
 
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="form-input"
-                    style={{ height: '38px', fontSize: '0.85rem', fontFamily: showPassword ? 'monospace' : 'inherit' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{
-                      position: 'absolute',
-                      right: '10px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--text-secondary)',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.85rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '0.65rem', borderTop: '1px solid var(--border-color)' }}>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Initial Account Status:</span>
                   <select
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
-                    className="form-input"
-                    style={{ width: '130px', height: '32px', fontSize: '0.8rem' }}
+                    className="form-input form-input--sm"
+                    style={{
+                      width: '135px',
+                      height: '36px',
+                      padding: '0 1.5rem 0 0.75rem',
+                      fontSize: '0.85rem',
+                      lineHeight: 'normal',
+                      boxSizing: 'border-box',
+                      cursor: 'pointer',
+                    }}
                   >
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
@@ -523,7 +567,7 @@ export default function StaffProvisioningModal({
               <button type="button" onClick={handleClose} className="btn btn--outline" disabled={loading}>
                 Cancel
               </button>
-              <button type="submit" disabled={loading} className="btn btn--primary" style={{ minWidth: '160px' }}>
+              <button type="submit" disabled={loading} className="btn btn--primary" style={{ minWidth: '200px' }}>
                 {loading ? 'Provisioning...' : 'Provision Staff Account'}
               </button>
             </div>

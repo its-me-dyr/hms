@@ -121,7 +121,7 @@ export default function RadiologyNotificationsTab({ _onNavigateTab }) {
         ) : notifications.length === 0 ? (
           <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
             <Bell size={36} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-            <p style={{ fontWeight: 600, color: '#475569' }}>No notifications to display.</p>
+            <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No notifications to display.</p>
             <p style={{ fontSize: '0.85rem' }}>You're all caught up with radiology alerts.</p>
           </div>
         ) : (
@@ -160,7 +160,7 @@ export default function RadiologyNotificationsTab({ _onNavigateTab }) {
 
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
+                      <strong style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>
                         {item.title || 'Radiology Notification'}
                       </strong>
                       <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
@@ -168,7 +168,7 @@ export default function RadiologyNotificationsTab({ _onNavigateTab }) {
                       </span>
                     </div>
 
-                    <p style={{ margin: '0.3rem 0 0', fontSize: '0.88rem', color: '#475569', lineHeight: 1.5 }}>
+                    <p style={{ margin: '0.3rem 0 0', fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                       {item.message || item.content || item.description}
                     </p>
 

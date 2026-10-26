@@ -10,7 +10,7 @@
  * - Live feed of Today's Check-ins & Check-outs
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   LogIn,
   LogOut,
@@ -20,13 +20,9 @@ import {
   Ticket,
   Printer,
   Calendar,
-  User,
-  Phone,
-  Building,
   RefreshCw,
   AlertCircle,
   Stethoscope,
-  Activity,
 } from 'lucide-react';
 import { receptionService } from '../../../services/reception.service';
 
@@ -50,7 +46,7 @@ export default function CheckInOutTab({ onSelectPatient }) {
   const getTodayStr = () => new Date().toISOString().split('T')[0];
 
   // Load recent check-ins for the hospital today
-  const loadRecentCheckIns = async () => {
+  const loadRecentCheckIns = useCallback(async () => {
     setLoadingFeed(true);
     try {
       const res = await receptionService.getAppointments({
@@ -66,11 +62,11 @@ export default function CheckInOutTab({ onSelectPatient }) {
     } finally {
       setLoadingFeed(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadRecentCheckIns();
-  }, []);
+  }, [loadRecentCheckIns]);
 
   // Search patients
   const handleSearch = async (e) => {
@@ -320,7 +316,7 @@ export default function CheckInOutTab({ onSelectPatient }) {
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-card)')}
                     >
                       <div>
-                        <div style={{ fontWeight: 600, color: '#0f172a' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                           {p.firstName} {p.lastName}
                         </div>
                         <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
@@ -369,7 +365,7 @@ export default function CheckInOutTab({ onSelectPatient }) {
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0f172a' }}>
+                      <span style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                         {selectedPatient.firstName} {selectedPatient.lastName}
                       </span>
                       <span className="rec-badge rec-badge--confirmed">
@@ -464,7 +460,7 @@ export default function CheckInOutTab({ onSelectPatient }) {
                         <div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <Stethoscope size={16} style={{ color: '#0891b2' }} />
-                            <span style={{ fontWeight: 700, color: '#0f172a' }}>
+                            <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                               Dr. {app.doctor?.firstName} {app.doctor?.lastName}
                             </span>
                             <span style={{ fontSize: '0.8rem', color: '#0891b2', fontWeight: 600 }}>
@@ -664,7 +660,7 @@ export default function CheckInOutTab({ onSelectPatient }) {
                           <Ticket size={16} />
                         </div>
                         <div>
-                          <div style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.88rem' }}>
+                          <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.88rem' }}>
                             {item.patient?.firstName} {item.patient?.lastName}
                           </div>
                           <div style={{ fontSize: '0.75rem', color: '#64748b' }}>

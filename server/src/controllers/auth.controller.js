@@ -4,45 +4,21 @@
  * HTTP request handlers for authentication, OTP verification, tokens, and staff approvals.
  */
 
+const crypto = require('crypto');
 const authService = require('../services/auth.service');
+const emailService = require('../services/email.service');
+const User = require('../models/User');
+const HospitalSetting = require('../models/HospitalSetting');
+const AuditLog = require('../models/AuditLog');
 const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
+const env = require('../config/env');
+const logger = require('../utils/logger');
 
 const PUBLIC_REGISTRATION_DISABLED_MESSAGE =
   'Public registration is disabled. Staff accounts must be created by Hospital Administration, and patient accounts must be registered by Reception / Front Desk staff.';
 
 class AuthController {
-  /**
-   * @route POST /api/v1/auth/register/request-otp
-   * @desc Blocked: Public staff & patient self-registration disabled
-   */
-  async requestOtp(req, res, next) {
-    return next(new ApiError(403, PUBLIC_REGISTRATION_DISABLED_MESSAGE));
-  }
-
-  /**
-   * @route POST /api/v1/auth/register/verify-otp
-   * @desc Blocked: Public staff & patient self-registration disabled
-   */
-  async verifyOtp(req, res, next) {
-    return next(new ApiError(403, PUBLIC_REGISTRATION_DISABLED_MESSAGE));
-  }
-
-  /**
-   * @route POST /api/v1/auth/register/resend-otp
-   * @desc Blocked: Public staff & patient self-registration disabled
-   */
-  async resendOtp(req, res, next) {
-    return next(new ApiError(403, PUBLIC_REGISTRATION_DISABLED_MESSAGE));
-  }
-
-  /**
-   * @route POST /api/v1/auth/register
-   * @desc Blocked: Public staff & patient self-registration disabled
-   */
-  async register(req, res, next) {
-    return next(new ApiError(403, PUBLIC_REGISTRATION_DISABLED_MESSAGE));
-  }
 
   /**
    * @route POST /api/v1/auth/login
@@ -243,7 +219,7 @@ class AuthController {
 
       const result = await authService.changePassword(req.user._id, currentPassword, newPassword, ipAddress, userAgent);
 
-      return ApiResponse.success(res, result.message);
+      return ApiResponse.success(res, result.message, result);
     } catch (error) {
       next(error);
     }

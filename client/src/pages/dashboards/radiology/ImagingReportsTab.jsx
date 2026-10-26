@@ -149,7 +149,7 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
           ) : reports.length === 0 ? (
             <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
               <FileCheck size={36} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-              <p style={{ fontWeight: 600, color: '#475569' }}>No diagnostic reports found.</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No diagnostic reports found.</p>
               <p style={{ fontSize: '0.85rem' }}>Try adjusting your search criteria.</p>
             </div>
           ) : (
@@ -249,10 +249,10 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
             <div style={{ borderBottom: '2px solid #0f172a', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                  <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#0f172a' }}>
+                  <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
                     HOSPITAL RADIOLOGY & IMAGING DEPARTMENT
                   </h2>
-                  <p style={{ margin: '0.2rem 0 0', fontSize: '0.85rem', color: '#475569' }}>
+                  <p style={{ margin: '0.2rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     Diagnostic Radiology & Molecular Imaging Services • Accredited Facility
                   </p>
                 </div>
@@ -264,23 +264,23 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
             </div>
 
             {/* Patient & Exam Metadata Block */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', background: '#f8fafc', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', background: 'var(--bg-surface)', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0', marginBottom: '1.5rem' }}>
               <div>
                 <div style={{ fontSize: '0.8rem', color: '#64748b' }}>PATIENT NAME</div>
-                <div style={{ fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>
+                <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {viewReport.patient?.fullName || viewReport.patient?.name || 'Unknown Patient'}
                 </div>
-                <div style={{ fontSize: '0.8rem', color: '#475569', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
                   MRN: <strong>{viewReport.patient?.medicalRecordNumber || 'N/A'}</strong> | Gender: {viewReport.patient?.gender || 'N/A'} | Age: {viewReport.patient?.age || 'N/A'}
                 </div>
               </div>
 
               <div>
                 <div style={{ fontSize: '0.8rem', color: '#64748b' }}>EXAM & ACCESSION</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {viewReport.studyType || viewReport.procedureName} ({viewReport.modality})
                 </div>
-                <div style={{ fontSize: '0.8rem', color: '#475569', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
                   Accession #: <strong>{viewReport.accessionNumber || 'N/A'}</strong> | Exam Date: {viewReport.createdAt ? new Date(viewReport.createdAt).toLocaleDateString() : 'N/A'}
                 </div>
               </div>
@@ -290,7 +290,7 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', lineHeight: 1.6, color: '#1e293b' }}>
               
               <div>
-                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   CLINICAL INDICATION & HISTORY
                 </h4>
                 <p style={{ margin: 0, fontSize: '0.92rem' }}>
@@ -299,7 +299,7 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
               </div>
 
               <div>
-                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   EXAMINATION TECHNIQUE
                 </h4>
                 <p style={{ margin: 0, fontSize: '0.92rem' }}>
@@ -308,7 +308,7 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
               </div>
 
               <div>
-                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   COMPARISON
                 </h4>
                 <p style={{ margin: 0, fontSize: '0.92rem' }}>
@@ -317,7 +317,7 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
               </div>
 
               <div>
-                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   DETAILED FINDINGS
                 </h4>
                 <p style={{ margin: 0, fontSize: '0.92rem', whiteSpace: 'pre-line' }}>
@@ -327,17 +327,17 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
 
               {/* Impression Box */}
               <div style={{ background: '#f1f5f9', padding: '1rem', borderRadius: '8px', borderLeft: '4px solid #6366f1' }}>
-                <h4 style={{ margin: '0 0 0.35rem', fontSize: '0.9rem', fontWeight: 800, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <h4 style={{ margin: '0 0 0.35rem', fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   IMPRESSION
                 </h4>
-                <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#0f172a', whiteSpace: 'pre-line' }}>
+                <div style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'pre-line' }}>
                   {viewReport.impression || 'Finalized impression.'}
                 </div>
               </div>
 
               {viewReport.recommendation && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     RECOMMENDATIONS
                   </h4>
                   <p style={{ margin: 0, fontSize: '0.92rem' }}>
@@ -350,7 +350,7 @@ export default function ImagingReportsTab({ activeReport, _onNavigateTab }) {
               <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
                   <div style={{ fontSize: '0.75rem', color: '#64748b' }}>ELECTRONICALLY SIGNED & VERIFIED BY:</div>
-                  <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
+                  <strong style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>
                     {viewReport.verifiedBy?.fullName || viewReport.radiologist?.name || 'Staff Radiologist, MD'}
                   </strong>
                   <div style={{ fontSize: '0.75rem', color: '#64748b' }}>

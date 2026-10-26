@@ -593,7 +593,7 @@ export default function PatientRegistrationTab({ onNavigateTab, onSelectPatient,
 
             <div
               style={{
-                background: '#f8fafc',
+                background: 'var(--bg-surface)',
                 border: '1px solid #e2e8f0',
                 borderRadius: '10px',
                 padding: '1rem',
@@ -603,7 +603,7 @@ export default function PatientRegistrationTab({ onNavigateTab, onSelectPatient,
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.82rem' }}>
                 <span style={{ color: '#64748b' }}>Patient Name:</span>
-                <strong style={{ color: '#0f172a' }}>{registeredPatient.name}</strong>
+                <strong style={{ color: 'var(--text-primary)' }}>{registeredPatient.name}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.82rem' }}>
                 <span style={{ color: '#64748b' }}>Assigned Patient ID:</span>
@@ -622,11 +622,11 @@ export default function PatientRegistrationTab({ onNavigateTab, onSelectPatient,
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.82rem' }}>
                 <span style={{ color: '#64748b' }}>Contact Phone:</span>
-                <span style={{ color: '#0f172a', fontWeight: 500 }}>{registeredPatient.phone}</span>
+                <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{registeredPatient.phone}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem' }}>
                 <span style={{ color: '#64748b' }}>Registration Date:</span>
-                <span style={{ color: '#0f172a' }}>{new Date(registeredPatient.registeredAt).toLocaleDateString()}</span>
+                <span style={{ color: 'var(--text-primary)' }}>{new Date(registeredPatient.registeredAt).toLocaleDateString()}</span>
               </div>
             </div>
 
@@ -647,11 +647,11 @@ export default function PatientRegistrationTab({ onNavigateTab, onSelectPatient,
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.82rem' }}>
                   <span style={{ color: '#15803d' }}>Portal Email / Username:</span>
-                  <strong style={{ color: '#0f172a' }}>{registeredPatient.credentials.portalUsername}</strong>
+                  <strong style={{ color: 'var(--text-primary)' }}>{registeredPatient.credentials.portalUsername}</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.82rem' }}>
                   <span style={{ color: '#15803d' }}>Assigned Password:</span>
-                  <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#0f172a', background: '#ffffff', padding: '0.15rem 0.45rem', borderRadius: '4px', border: '1px solid #dcfce7' }}>
+                  <span style={{ fontFamily: 'monospace', fontWeight: 700, color: 'var(--text-primary)', background: 'var(--bg-card)', padding: '0.15rem 0.45rem', borderRadius: '4px', border: '1px solid #dcfce7' }}>
                     {registeredPatient.credentials.temporaryPassword}
                   </span>
                 </div>

@@ -270,7 +270,6 @@ export default function PatientDashboard() {
 
   // Fetch data whenever active tab changes
   useEffect(() => {
-    /* eslint-disable react-hooks/set-state-in-effect */
     switch (activeTab) {
       case 'dashboard':
         fetchDashboardSummary();
@@ -495,7 +494,7 @@ export default function PatientDashboard() {
           icon: Bell,
           label: type ? type.charAt(0).toUpperCase() + type.slice(1) : 'Alert',
           iconBoxClass: 'notif-icon-box--system',
-          badgeStyle: { background: '#f1f5f9', color: '#475569', border: '1px solid var(--border-color)' },
+          badgeStyle: { background: '#f1f5f9', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' },
         };
     }
   };
@@ -573,7 +572,7 @@ export default function PatientDashboard() {
 
       {/* ─── Tab Content ──────────────────────────────────────── */}
       {loading && !summary && !profile && appointments.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '3.5rem 1rem', color: '#64748b' }}>
+        <div style={{ textAlign: 'center', padding: '3.5rem 1rem', color: 'var(--text-secondary)' }}>
           <div className="btn__loading" style={{ display: 'inline-block', marginBottom: '0.5rem' }} />
           <p style={{ margin: 0, fontSize: '0.9rem' }}>Fetching clinical records from database...</p>
         </div>
@@ -713,8 +712,8 @@ export default function PatientDashboard() {
                               at {summary.upcomingAppointment.appointmentTime}
                             </strong>
                           </span>
-                          <span className="patient-schedule-item" style={{ color: '#64748b' }}>
-                            <MapPin size={15} style={{ color: '#64748b' }} />
+                          <span className="patient-schedule-item" style={{ color: 'var(--text-secondary)' }}>
+                            <MapPin size={15} style={{ color: 'var(--text-secondary)' }} />
                             Main Hospital, OPD Wing B (Room 302)
                           </span>
                         </div>
@@ -920,22 +919,22 @@ export default function PatientDashboard() {
                               >
                                 <div>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                                    <strong style={{ fontSize: '0.875rem', color: '#0f172a' }}>{med.name}</strong>
+                                    <strong style={{ fontSize: '0.875rem', color: 'var(--text-primary)' }}>{med.name}</strong>
                                     <span className="badge" style={{ background: '#e0f2fe', color: '#0369a1', fontSize: '0.72rem', fontWeight: 600 }}>
                                       {med.dosage}
                                     </span>
                                   </div>
-                                  <div style={{ fontSize: '0.8rem', color: '#475569', marginBottom: '0.2rem' }}>
+                                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>
                                     {med.frequency} • {med.duration}
                                   </div>
                                   {med.instructions && (
-                                    <div style={{ fontSize: '0.75rem', color: '#64748b', fontStyle: 'italic' }}>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
                                       "{med.instructions}"
                                     </div>
                                   )}
                                 </div>
                                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                                  <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>
+                                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block' }}>
                                     Dr. {rx.doctor?.firstName} {rx.doctor?.lastName}
                                   </span>
                                   <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
@@ -995,12 +994,12 @@ export default function PatientDashboard() {
                         <div className="patient-item-row" style={{ alignItems: 'center' }}>
                           <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                              <strong style={{ fontSize: '0.875rem', color: '#0f172a' }}>{summary.recentLabReport.testName}</strong>
+                              <strong style={{ fontSize: '0.875rem', color: 'var(--text-primary)' }}>{summary.recentLabReport.testName}</strong>
                               <span className="badge" style={{ background: '#e0f2fe', color: '#0369a1', fontSize: '0.7rem', fontWeight: 600 }}>
                                 Laboratory
                               </span>
                             </div>
-                            <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
+                            <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                               Date: {new Date(summary.recentLabReport.testDate).toLocaleDateString()} • Attending: Dr. {summary.recentLabReport.doctor?.firstName || 'Staff'} {summary.recentLabReport.doctor?.lastName || ''}
                             </div>
                           </div>
@@ -1025,12 +1024,12 @@ export default function PatientDashboard() {
                         <div className="patient-item-row" style={{ alignItems: 'center' }}>
                           <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                              <strong style={{ fontSize: '0.875rem', color: '#0f172a' }}>{summary.recentRadiologyReport.examinationName || summary.recentRadiologyReport.modality || 'Radiology Study'}</strong>
+                              <strong style={{ fontSize: '0.875rem', color: 'var(--text-primary)' }}>{summary.recentRadiologyReport.examinationName || summary.recentRadiologyReport.modality || 'Radiology Study'}</strong>
                               <span className="badge" style={{ background: '#f0fdfa', color: '#0891b2', border: '1px solid #ccfbf1', fontSize: '0.7rem', fontWeight: 600 }}>
                                 {summary.recentRadiologyReport.modality || 'Radiology'}
                               </span>
                             </div>
-                            <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
+                            <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                               Date: {new Date(summary.recentRadiologyReport.examinationDate).toLocaleDateString()} • Modality: {summary.recentRadiologyReport.modality || 'Radiology'}
                             </div>
                           </div>
@@ -1090,10 +1089,10 @@ export default function PatientDashboard() {
                       </button>
                     </div>
 
-                    <div style={{ background: '#f8fafc', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid var(--border-color)', marginBottom: 0 }}>
+                    <div style={{ background: 'var(--bg-surface)', padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid var(--border-color)', marginBottom: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                          <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, display: 'block', marginBottom: '0.2rem' }}>
+                          <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, display: 'block', marginBottom: '0.2rem' }}>
                             Pending Amount
                           </span>
                           <span style={{ fontSize: '1.4rem', fontWeight: 700, color: summary?.pendingBalance > 0 ? '#b45309' : '#0f172a' }}>
@@ -1120,7 +1119,7 @@ export default function PatientDashboard() {
                       </div>
 
                       {summary?.recentBill && (
-                        <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #e2e8f0', fontSize: '0.8rem', color: '#475569', display: 'flex', justifyContent: 'space-between' }}>
+                        <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between' }}>
                           <span>Recent Invoice: #{summary.recentBill.invoiceNumber}</span>
                           <span>{new Date(summary.recentBill.billDate).toLocaleDateString()}</span>
                         </div>
@@ -1180,12 +1179,12 @@ export default function PatientDashboard() {
                             </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
                               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.15rem' }}>
-                                <strong style={{ fontSize: '0.84rem', color: '#0f172a' }}>{act.title}</strong>
+                                <strong style={{ fontSize: '0.84rem', color: 'var(--text-primary)' }}>{act.title}</strong>
                                 <span style={{ fontSize: '0.7rem', color: '#94a3b8', whiteSpace: 'nowrap' }}>
                                   {new Date(act.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                 </span>
                               </div>
-                              <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748b', lineHeight: 1.4 }}>
+                              <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
                                 {act.description}
                               </p>
                             </div>
@@ -1244,12 +1243,12 @@ export default function PatientDashboard() {
                           >
                             <div>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
-                                <strong style={{ fontSize: '0.84rem', color: '#0f172a' }}>{notif.title}</strong>
+                                <strong style={{ fontSize: '0.84rem', color: 'var(--text-primary)' }}>{notif.title}</strong>
                                 {!notif.isRead && (
                                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0891b2' }} />
                                 )}
                               </div>
-                              <p style={{ margin: 0, color: '#475569', fontSize: '0.78rem', lineHeight: 1.4 }}>
+                              <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.78rem', lineHeight: 1.4 }}>
                                 {notif.message}
                               </p>
                               <span style={{ fontSize: '0.68rem', color: '#94a3b8', marginTop: '0.25rem', display: 'block' }}>
@@ -1260,7 +1259,7 @@ export default function PatientDashboard() {
                               <button
                                 onClick={() => handleMarkNotificationRead(notif._id)}
                                 title="Mark as read"
-                                style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', padding: '2px' }}
+                                style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '2px' }}
                               >
                                 <Check size={14} />
                               </button>
@@ -1419,7 +1418,7 @@ export default function PatientDashboard() {
                           Personal Information
                         </h3>
                         {editingProfile && (
-                          <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 500 }}>
+                          <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
                             Identity fields are locked
                           </span>
                         )}
@@ -1871,19 +1870,19 @@ export default function PatientDashboard() {
                             >
                               {appt.status}
                             </span>
-                            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                               Fee: ${appt.consultationFee || 50}
                             </span>
                           </div>
 
-                          <h3 style={{ margin: '0 0 0.25rem', fontSize: '1.05rem', color: '#0f172a' }}>
+                          <h3 style={{ margin: '0 0 0.25rem', fontSize: '1.05rem', color: 'var(--text-primary)' }}>
                             Dr. {appt.doctor?.firstName} {appt.doctor?.lastName}
                           </h3>
                           <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-primary-dark)', fontWeight: 600 }}>
                             {appt.department || appt.doctor?.specialization || 'Clinical Department'}
                           </p>
 
-                          <div style={{ margin: '0.75rem 0', fontSize: '0.825rem', color: '#475569', background: '#f8fafc', padding: '0.6rem 0.75rem', borderRadius: '8px' }}>
+                          <div style={{ margin: '0.75rem 0', fontSize: '0.825rem', color: 'var(--text-secondary)', background: 'var(--bg-surface)', padding: '0.6rem 0.75rem', borderRadius: '8px' }}>
                             <div>📅 <strong>Date:</strong> {new Date(appt.appointmentDate).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</div>
                             <div>⏰ <strong>Time Slot:</strong> {appt.appointmentTime}</div>
                             <div style={{ marginTop: '0.25rem' }}>📝 <strong>Reason:</strong> {appt.reason}</div>
@@ -1920,7 +1919,7 @@ export default function PatientDashboard() {
                 <div style={{ background: 'var(--bg-card)', padding: '3rem 1.5rem', borderRadius: '14px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                   <Calendar size={40} style={{ color: '#94a3b8', margin: '0 auto 0.75rem' }} />
                   <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#334155' }}>No appointments found</h3>
-                  <p style={{ margin: '0.25rem 0 1rem', fontSize: '0.85rem', color: '#64748b' }}>
+                  <p style={{ margin: '0.25rem 0 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     You have no {appointmentFilter !== 'All' ? appointmentFilter.toLowerCase() : ''} consultations scheduled.
                   </p>
                   <button onClick={() => setActiveTab('book-appointment')} className="btn btn--primary btn--sm">
@@ -2114,26 +2113,26 @@ export default function PatientDashboard() {
                           <span className="badge badge--primary" style={{ marginBottom: '0.3rem' }}>
                             Consultation Record
                           </span>
-                          <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#0f172a' }}>
+                          <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary)' }}>
                             {rec.diagnosis}
                           </h3>
-                          <p style={{ margin: '0.2rem 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                          <p style={{ margin: '0.2rem 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                             Attending Physician: <strong>Dr. {rec.doctor?.firstName} {rec.doctor?.lastName}</strong> ({rec.doctor?.specialization || 'Clinical Specialist'})
                           </p>
                         </div>
-                        <div style={{ textAlign: 'right', fontSize: '0.8rem', color: '#64748b' }}>
+                        <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                           📅 {new Date(rec.consultationDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                         </div>
                       </div>
 
                       {/* Vitals Grid */}
                       {rec.vitals && (
-                        <div style={{ marginBottom: '0.75rem', background: '#f8fafc', padding: '0.75rem 1rem', borderRadius: '8px', display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
-                          <div><span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', display: 'block' }}>Blood Pressure</span><strong>{rec.vitals.bp || 'N/A'}</strong></div>
-                          <div><span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', display: 'block' }}>Heart Rate</span><strong>{rec.vitals.heartRate || 'N/A'}</strong></div>
-                          <div><span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', display: 'block' }}>Temperature</span><strong>{rec.vitals.temperature || 'N/A'}</strong></div>
-                          <div><span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', display: 'block' }}>Weight</span><strong>{rec.vitals.weight || 'N/A'}</strong></div>
-                          <div><span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', display: 'block' }}>SpO2</span><strong>{rec.vitals.spo2 || 'N/A'}</strong></div>
+                        <div style={{ marginBottom: '0.75rem', background: 'var(--bg-surface)', padding: '0.75rem 1rem', borderRadius: '8px', display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+                          <div><span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', display: 'block' }}>Blood Pressure</span><strong>{rec.vitals.bp || 'N/A'}</strong></div>
+                          <div><span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', display: 'block' }}>Heart Rate</span><strong>{rec.vitals.heartRate || 'N/A'}</strong></div>
+                          <div><span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', display: 'block' }}>Temperature</span><strong>{rec.vitals.temperature || 'N/A'}</strong></div>
+                          <div><span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', display: 'block' }}>Weight</span><strong>{rec.vitals.weight || 'N/A'}</strong></div>
+                          <div><span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', display: 'block' }}>SpO2</span><strong>{rec.vitals.spo2 || 'N/A'}</strong></div>
                         </div>
                       )}
 
@@ -2153,7 +2152,7 @@ export default function PatientDashboard() {
                 <div style={{ background: 'var(--bg-card)', padding: '3rem 1.5rem', borderRadius: '14px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                   <History size={40} style={{ color: '#94a3b8', margin: '0 auto 0.75rem' }} />
                   <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#334155' }}>No medical history records yet</h3>
-                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     Consultation summaries and diagnostic notes appear here following your hospital visits.
                   </p>
                 </div>
@@ -2188,14 +2187,14 @@ export default function PatientDashboard() {
                           <span className={`badge ${rx.status === 'Active' ? 'badge--success' : 'badge--secondary'}`}>
                             {rx.status}
                           </span>
-                          <h3 style={{ margin: '0.25rem 0 0', fontSize: '1.05rem', color: '#0f172a' }}>
+                          <h3 style={{ margin: '0.25rem 0 0', fontSize: '1.05rem', color: 'var(--text-primary)' }}>
                             {rx.diagnosis || 'Clinical Prescription'}
                           </h3>
-                          <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                          <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                             Prescribed by Dr. {rx.doctor?.firstName} {rx.doctor?.lastName} ({rx.doctor?.specialization || 'Attending Physician'})
                           </p>
                         </div>
-                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                           📅 Issued: {new Date(rx.prescriptionDate).toLocaleDateString()}
                         </div>
                       </div>
@@ -2219,7 +2218,7 @@ export default function PatientDashboard() {
                                 <td>{med.dosage}</td>
                                 <td>{med.frequency}</td>
                                 <td>{med.duration}</td>
-                                <td style={{ color: '#64748b' }}>{med.instructions || 'As directed'}</td>
+                                <td style={{ color: 'var(--text-secondary)' }}>{med.instructions || 'As directed'}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -2227,7 +2226,7 @@ export default function PatientDashboard() {
                       </div>
 
                       {rx.notes && (
-                        <div style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: '#475569', fontStyle: 'italic', background: '#f8fafc', padding: '0.5rem 0.75rem', borderRadius: '6px' }}>
+                        <div style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic', background: 'var(--bg-surface)', padding: '0.5rem 0.75rem', borderRadius: '6px' }}>
                           📌 <strong>Doctor Note:</strong> {rx.notes}
                         </div>
                       )}
@@ -2238,7 +2237,7 @@ export default function PatientDashboard() {
                 <div style={{ background: 'var(--bg-card)', padding: '3rem 1.5rem', borderRadius: '14px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                   <Pill size={40} style={{ color: '#94a3b8', margin: '0 auto 0.75rem' }} />
                   <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#334155' }}>No prescriptions on record</h3>
-                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     Signed medical prescriptions from hospital physicians will display here.
                   </p>
                 </div>
@@ -2278,14 +2277,14 @@ export default function PatientDashboard() {
                               {lab.status}
                             </span>
                           </div>
-                          <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#0f172a' }}>
+                          <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary)' }}>
                             {lab.testName}
                           </h3>
-                          <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                          <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                             Ordered by: Dr. {lab.doctor?.firstName} {lab.doctor?.lastName}
                           </p>
                         </div>
-                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                           📅 Specimen Date: {new Date(lab.testDate).toLocaleDateString()}
                         </div>
                       </div>
@@ -2311,7 +2310,7 @@ export default function PatientDashboard() {
                                     {item.result}
                                   </td>
                                   <td>{item.unit || '-'}</td>
-                                  <td style={{ color: '#64748b' }}>{item.referenceRange}</td>
+                                  <td style={{ color: 'var(--text-secondary)' }}>{item.referenceRange}</td>
                                   <td>
                                     <span
                                       className={`badge ${
@@ -2332,13 +2331,13 @@ export default function PatientDashboard() {
                           </table>
                         </div>
                       ) : (
-                        <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                        <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                           Specimen in processing. Results pending laboratory verification.
                         </p>
                       )}
 
                       {lab.notes && (
-                        <div style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: '#475569', background: '#f8fafc', padding: '0.5rem 0.75rem', borderRadius: '6px' }}>
+                        <div style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--bg-surface)', padding: '0.5rem 0.75rem', borderRadius: '6px' }}>
                           🔬 <strong>Laboratory Impression:</strong> {lab.notes}
                         </div>
                       )}
@@ -2349,7 +2348,7 @@ export default function PatientDashboard() {
                 <div style={{ background: 'var(--bg-card)', padding: '3rem 1.5rem', borderRadius: '14px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                   <Microscope size={40} style={{ color: '#94a3b8', margin: '0 auto 0.75rem' }} />
                   <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#334155' }}>No lab reports found</h3>
-                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     Laboratory diagnostic orders and specimen analyses will appear here.
                   </p>
                 </div>
@@ -2389,21 +2388,21 @@ export default function PatientDashboard() {
                               {rad.status}
                             </span>
                           </div>
-                          <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#0f172a' }}>
+                          <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary)' }}>
                             {rad.examinationName}
                           </h3>
-                          <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                          <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                             Ordering Physician: Dr. {rad.doctor?.firstName} {rad.doctor?.lastName}
                           </p>
                         </div>
-                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                           📅 Exam Date: {new Date(rad.examinationDate).toLocaleDateString()}
                         </div>
                       </div>
 
                       <div style={{ marginBottom: '0.75rem' }}>
-                        <strong style={{ fontSize: '0.85rem', color: '#0f172a' }}>Radiological Findings:</strong>
-                        <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#475569', lineHeight: 1.5 }}>
+                        <strong style={{ fontSize: '0.85rem', color: 'var(--text-primary)' }}>Radiological Findings:</strong>
+                        <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                           {rad.findings || 'Examination completed. No remarkable acute pathological abnormalities observed.'}
                         </p>
                       </div>
@@ -2417,7 +2416,7 @@ export default function PatientDashboard() {
                         </div>
                       )}
 
-                      <div style={{ fontSize: '0.78rem', color: '#64748b', textAlign: 'right' }}>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', textAlign: 'right' }}>
                         Interpreted by: <em>{rad.radiologist || 'Staff Radiologist'}</em>
                       </div>
                     </div>
@@ -2427,7 +2426,7 @@ export default function PatientDashboard() {
                 <div style={{ background: 'var(--bg-card)', padding: '3rem 1.5rem', borderRadius: '14px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                   <ImageIcon size={40} style={{ color: '#94a3b8', margin: '0 auto 0.75rem' }} />
                   <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#334155' }}>No radiology studies found</h3>
-                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     Imaging scans and radiology interpretations will appear here when scheduled.
                   </p>
                 </div>
@@ -2462,7 +2461,7 @@ export default function PatientDashboard() {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                           <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                              <strong style={{ fontSize: '1.05rem', color: '#0f172a' }}>
+                              <strong style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>
                                 Invoice #{bill.invoiceNumber}
                               </strong>
                               <span
@@ -2477,13 +2476,13 @@ export default function PatientDashboard() {
                                 {bill.paymentStatus}
                               </span>
                             </div>
-                            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                               Date: {new Date(bill.billDate).toLocaleDateString()} • Due: {new Date(bill.dueDate).toLocaleDateString()}
                             </span>
                           </div>
 
                           <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Net Total: <strong>${bill.netAmount.toFixed(2)}</strong></div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Net Total: <strong>${bill.netAmount.toFixed(2)}</strong></div>
                             <div style={{ fontSize: '1.05rem', fontWeight: 700, color: pending > 0 ? '#b45309' : '#059669' }}>
                               {pending > 0 ? `Due: $${pending.toFixed(2)}` : 'Fully Paid'}
                             </div>
@@ -2517,8 +2516,8 @@ export default function PatientDashboard() {
                         </div>
 
                         {/* Payment Actions & History */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', background: '#f8fafc', padding: '0.75rem 1rem', borderRadius: '8px' }}>
-                          <div style={{ fontSize: '0.8rem', color: '#475569' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', background: 'var(--bg-surface)', padding: '0.75rem 1rem', borderRadius: '8px' }}>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                             Paid so far: <strong>${(bill.paidAmount || 0).toFixed(2)}</strong>
                             {bill.discount > 0 && ` (Discount: $${bill.discount.toFixed(2)})`}
                           </div>
@@ -2551,7 +2550,7 @@ export default function PatientDashboard() {
                 <div style={{ background: 'var(--bg-card)', padding: '3rem 1.5rem', borderRadius: '14px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                   <CreditCard size={40} style={{ color: '#94a3b8', margin: '0 auto 0.75rem' }} />
                   <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#334155' }}>No invoices on file</h3>
-                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     Hospital consultation and diagnostic service bills will be issued here.
                   </p>
                 </div>
@@ -2782,13 +2781,13 @@ export default function PatientDashboard() {
               </div>
               <button
                 onClick={() => setSelectedAppointment(null)}
-                style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}
+                style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.85rem', color: '#475569' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               <div>
                 <strong>Status: </strong>
                 <span className={`badge ${selectedAppointment.status === 'Confirmed' ? 'badge--success' : selectedAppointment.status === 'Completed' ? 'badge--primary' : 'badge--warning'}`}>
@@ -2818,14 +2817,14 @@ export default function PatientDashboard() {
               </div>
               <div>
                 <strong>Reason for Visit: </strong>
-                <p style={{ margin: '0.2rem 0 0', background: '#f8fafc', padding: '0.5rem', borderRadius: '6px' }}>
+                <p style={{ margin: '0.2rem 0 0', background: 'var(--bg-surface)', padding: '0.5rem', borderRadius: '6px' }}>
                   {selectedAppointment.reason}
                 </p>
               </div>
               {selectedAppointment.notes && (
                 <div>
                   <strong>Clinical Notes: </strong>
-                  <p style={{ margin: '0.2rem 0 0', background: '#f8fafc', padding: '0.5rem', borderRadius: '6px' }}>
+                  <p style={{ margin: '0.2rem 0 0', background: 'var(--bg-surface)', padding: '0.5rem', borderRadius: '6px' }}>
                     {selectedAppointment.notes}
                   </p>
                 </div>
@@ -2885,7 +2884,7 @@ export default function PatientDashboard() {
               <AlertCircle size={22} />
               <h3 style={{ margin: 0, fontSize: '1.15rem' }}>Cancel Appointment?</h3>
             </div>
-            <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5, margin: '0 0 1rem' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: '0 0 1rem' }}>
               Are you sure you want to cancel your appointment with <strong>Dr. {selectedAppointment.doctor?.firstName} {selectedAppointment.doctor?.lastName}</strong> scheduled on {new Date(selectedAppointment.appointmentDate).toLocaleDateString()} at {selectedAppointment.appointmentTime}?
             </p>
 
@@ -2965,13 +2964,13 @@ export default function PatientDashboard() {
                   </div>
                   <button
                     onClick={() => setShowPaymentModal(false)}
-                    style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}
+                    style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
                   >
                     <X size={18} />
                   </button>
                 </div>
 
-                <div style={{ background: '#f8fafc', padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.85rem' }}>
+                <div style={{ background: 'var(--bg-surface)', padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.85rem' }}>
                   <div><strong>Invoice:</strong> #{paymentBill.invoiceNumber}</div>
                   <div><strong>Total Bill:</strong> ${paymentBill.netAmount.toFixed(2)}</div>
                   <div><strong>Already Paid:</strong> ${(paymentBill.paidAmount || 0).toFixed(2)}</div>
@@ -3045,13 +3044,13 @@ export default function PatientDashboard() {
                   >
                     <CheckCircle2 size={32} />
                   </div>
-                  <h3 style={{ margin: 0, fontSize: '1.2rem', color: '#0f172a' }}>Payment Receipt</h3>
-                  <p style={{ margin: '0.2rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--text-primary)' }}>Payment Receipt</h3>
+                  <p style={{ margin: '0.2rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                     Your transaction has been verified and recorded.
                   </p>
                 </div>
 
-                <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '10px', fontSize: '0.825rem', color: '#334155', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+                <div style={{ background: 'var(--bg-surface)', padding: '1rem', borderRadius: '10px', fontSize: '0.825rem', color: '#334155', lineHeight: 1.6, marginBottom: '1.25rem' }}>
                   <div><strong>Transaction Ref:</strong> {paymentReceipt.transactionId}</div>
                   <div><strong>Invoice #:</strong> {paymentReceipt.bill?.invoiceNumber}</div>
                   <div><strong>Amount Paid:</strong> ${paymentReceipt.amount.toFixed(2)}</div>

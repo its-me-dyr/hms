@@ -15,6 +15,7 @@ const pharmacyRoutes = require('./pharmacy.routes');
 const labRoutes = require('./lab.routes');
 const radiologyRoutes = require('./radiology.routes');
 const hospitalAdminRoutes = require('./hospitalAdmin.routes');
+const doctorRoutes = require('./doctor.routes');
 
 // Health Check
 router.get('/health', (req, res) => {
@@ -32,7 +33,9 @@ router.get('/health', (req, res) => {
 // Mount Module Routes
 router.use('/auth', authRoutes);
 router.use('/patient', patientRoutes);
+router.use('/doctor', doctorRoutes);
 router.use('/super-admin', superadminRoutes);
+router.use('/superadmin', superadminRoutes);
 router.use('/hospital-admin', hospitalAdminRoutes);
 router.use('/reception', receptionRoutes);
 router.use('/pharmacy', pharmacyRoutes);
