@@ -56,7 +56,7 @@ export default function PrivacySecuritySettings() {
               <ShieldCheck size={14} /> Access Authorization
             </div>
             <div className="settings-meta-val" style={{ textTransform: 'uppercase', color: 'var(--color-primary)' }}>
-              {String(user?.role || 'User').replace(/_/g, ' ')} RBAC
+              {(typeof user?.role === 'string' ? user.role : (user?.roleName || user?.role?.displayName || 'User')).replace(/_/g, ' ')} RBAC
             </div>
           </div>
 

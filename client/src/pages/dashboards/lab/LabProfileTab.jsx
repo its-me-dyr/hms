@@ -11,13 +11,8 @@ import { useState } from 'react';
 import {
   User,
   Shield,
-  Key,
   CheckCircle2,
   AlertTriangle,
-  Mail,
-  Phone,
-  Building2,
-  Clock,
   X,
   Lock,
 } from 'lucide-react';

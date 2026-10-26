@@ -153,7 +153,7 @@ export default function CriticalFindingsTab({ onNavigateTab }) {
           ) : findings.length === 0 ? (
             <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
               <CheckCircle2 size={36} style={{ margin: '0 auto 0.75rem', color: '#10b981' }} />
-              <p style={{ fontWeight: 600, color: '#475569' }}>No critical findings requiring action.</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No critical findings requiring action.</p>
               <p style={{ fontSize: '0.85rem' }}>All life-threatening observations have been communicated or none exist.</p>
             </div>
           ) : (

@@ -9,6 +9,7 @@ const express = require('express');
 const router = express.Router();
 const hospitalAdminController = require('../controllers/hospitalAdmin.controller');
 const superadminController = require('../controllers/superadmin.controller');
+const authController = require('../controllers/auth.controller');
 const { protect, restrictTo } = require('../middleware/auth');
 
 // All routes require authentication and hospital_admin or super_admin role
@@ -21,24 +22,33 @@ router.get('/dashboard', hospitalAdminController.getDashboardOverview);
 // 2. Hospital & Branch Settings
 router.get('/settings', hospitalAdminController.getHospitalSettings);
 router.put('/settings', hospitalAdminController.updateHospitalSettings);
+router.patch('/settings', hospitalAdminController.updateHospitalSettings);
 router.get('/branches', hospitalAdminController.getBranches);
 router.post('/branches', hospitalAdminController.saveBranch);
+router.put('/branches/:id', hospitalAdminController.saveBranch);
+router.patch('/branches/:id/status', hospitalAdminController.toggleBranchStatus);
+router.patch('/branches/:id/primary', hospitalAdminController.setPrimaryBranch);
 router.delete('/branches/:id', hospitalAdminController.deleteBranch);
 
 // 3. Department Management
 router.get('/departments', hospitalAdminController.getDepartments);
 router.post('/departments', hospitalAdminController.createDepartment);
 router.put('/departments/:id', hospitalAdminController.updateDepartment);
+router.patch('/departments/:id', hospitalAdminController.updateDepartment);
 router.patch('/departments/:id/status', hospitalAdminController.toggleDepartmentStatus);
 
 // 4. Service & Charge Configuration
 router.get('/services', hospitalAdminController.getServicesAndCharges);
 router.post('/services', hospitalAdminController.saveServiceCharge);
+router.put('/services/:id', hospitalAdminController.saveServiceCharge);
+router.patch('/services/:id', hospitalAdminController.saveServiceCharge);
 router.delete('/services/:id', hospitalAdminController.deleteServiceCharge);
 
 // 5. Users & Staff Management (reusing battle-tested staff provisioning architecture)
 router.get('/users', superadminController.getUsersAndStaff);
 router.post('/users', superadminController.createStaffUser);
+router.post('/users/:id/resend-credentials', superadminController.resendStaffCredentials);
+router.put('/users/:id', superadminController.updateStaffUser);
 router.patch('/users/:id/status', superadminController.updateUserStatus);
 
 // 6. Roles & Permissions (Read-only inspection for Hospital Admin)
@@ -64,13 +74,16 @@ router.get('/reports', hospitalAdminController.getAdministrativeReports);
 // 11. Notifications
 router.get('/notifications', hospitalAdminController.getNotifications);
 router.patch('/notifications/read-all', hospitalAdminController.markAllNotificationsRead);
+router.patch('/notifications/mark-all-read', hospitalAdminController.markAllNotificationsRead);
 router.patch('/notifications/:id/read', hospitalAdminController.markNotificationRead);
 
 // 12. Audit Logs
 router.get('/audit-logs', hospitalAdminController.getAuditLogs);
 
-// 13. My Profile
+// 13. My Profile & Account Security
 router.get('/profile', hospitalAdminController.getMyProfile);
 router.put('/profile', hospitalAdminController.updateMyProfile);
+router.put('/change-password', authController.changePassword);
+router.put('/profile/password', authController.changePassword);
 
 module.exports = router;

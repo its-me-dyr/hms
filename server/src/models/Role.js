@@ -47,10 +47,34 @@ const roleSchema = new mongoose.Schema(
   }
 );
 
-// Virtual for checking if role has a specific permission
+// Virtual for checking if role has a specific permission with wildcard and alias support
 roleSchema.methods.hasPermission = function (permissionCode) {
+  if (!this.permissions || this.permissions.length === 0) return false;
   if (this.permissions.includes('*')) return true;
-  return this.permissions.includes(permissionCode.toLowerCase());
+
+  const perm = String(permissionCode || '').toLowerCase().trim();
+  if (this.permissions.includes(perm)) return true;
+
+  const [domain, action] = perm.split(':');
+  if (domain) {
+    if (this.permissions.includes(`${domain}:*`)) return true;
+    if (this.permissions.includes(`${domain}:manage`)) return true;
+  }
+
+  // Alias support
+  if (action === 'create' || action === 'update') {
+    if (this.permissions.includes(`${domain}:write`)) return true;
+  }
+  if (action === 'cancel') {
+    if (this.permissions.includes(`${domain}:delete`)) return true;
+  }
+  if (domain === 'admin') {
+    if (action === 'users' && this.permissions.includes('users:manage')) return true;
+    if (action === 'roles' && this.permissions.includes('roles:manage')) return true;
+    if (action === 'settings' && this.permissions.includes('settings:manage')) return true;
+  }
+
+  return false;
 };
 
 module.exports = mongoose.model('Role', roleSchema);

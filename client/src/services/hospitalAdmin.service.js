@@ -15,22 +15,27 @@ export const hospitalAdminService = {
   updateHospitalSettings: (data) => api.put('/hospital-admin/settings', data),
   getBranches: () => api.get('/hospital-admin/branches'),
   saveBranch: (data) => api.post('/hospital-admin/branches', data),
+  toggleBranchStatus: (id, data) => api.patch(`/hospital-admin/branches/${id}/status`, data),
+  setPrimaryBranch: (id) => api.patch(`/hospital-admin/branches/${id}/primary`),
   deleteBranch: (id) => api.delete(`/hospital-admin/branches/${id}`),
 
   // 3. Departments
-  getDepartments: () => api.get('/hospital-admin/departments'),
+  getDepartments: (params) => api.get('/hospital-admin/departments', { params }),
   createDepartment: (data) => api.post('/hospital-admin/departments', data),
   updateDepartment: (id, data) => api.put(`/hospital-admin/departments/${id}`, data),
-  toggleDepartmentStatus: (id) => api.patch(`/hospital-admin/departments/${id}/status`),
+  toggleDepartmentStatus: (id, data) => api.patch(`/hospital-admin/departments/${id}/status`, data),
 
   // 4. Services & Charges
-  getServicesAndCharges: () => api.get('/hospital-admin/services'),
+  getServicesAndCharges: (params) => api.get('/hospital-admin/services', { params }),
   saveServiceCharge: (data) => api.post('/hospital-admin/services', data),
+  updateServiceCharge: (id, data) => api.put(`/hospital-admin/services/${id}`, data),
   deleteServiceCharge: (id) => api.delete(`/hospital-admin/services/${id}`),
 
   // 5. Users & Staff Management
   getUsersAndStaff: (params) => api.get('/hospital-admin/users', { params }),
   createStaffUser: (data) => api.post('/hospital-admin/users', data),
+  resendStaffCredentials: (id) => api.post(`/hospital-admin/users/${id}/resend-credentials`),
+  updateStaffUser: (id, data) => api.put(`/hospital-admin/users/${id}`, data),
   updateUserStatus: (id, data) => api.patch(`/hospital-admin/users/${id}/status`, data),
 
   // 6. Roles & Permissions (Read-only inspection)
@@ -56,7 +61,7 @@ export const hospitalAdminService = {
   // 11. Notifications
   getNotifications: () => api.get('/hospital-admin/notifications'),
   markNotificationRead: (id) => api.patch(`/hospital-admin/notifications/${id}/read`),
-  markAllNotificationsRead: () => api.patch('/hospital-admin/notifications/read-all'),
+  markAllNotificationsRead: () => api.patch('/hospital-admin/notifications/mark-all-read'),
 
   // 12. Audit Logs
   getAuditLogs: (params) => api.get('/hospital-admin/audit-logs', { params }),
@@ -64,4 +69,5 @@ export const hospitalAdminService = {
   // 13. My Profile
   getMyProfile: () => api.get('/hospital-admin/profile'),
   updateMyProfile: (data) => api.put('/hospital-admin/profile', data),
+  changePassword: (data) => api.put('/auth/change-password', data),
 };

@@ -44,16 +44,16 @@ const env = {
   superAdminEmail: (process.env.SUPER_ADMIN_EMAIL || '').toLowerCase().trim(),
   superAdminPasswordHash: (process.env.SUPER_ADMIN_PASSWORD_HASH || '').trim(),
 
-  // SMTP Configuration
-  smtpHost: (process.env.SMTP_HOST || '').trim(),
-  smtpPort: parseInt(process.env.SMTP_PORT, 10) || 587,
-  smtpSecure: process.env.SMTP_SECURE === 'true' || parseInt(process.env.SMTP_PORT, 10) === 465,
-  smtpUser: (process.env.SMTP_USER || '').trim(),
-  smtpPassword: (process.env.SMTP_PASSWORD || '').trim(),
-  smtpFrom: process.env.SMTP_FROM || '"HMS Healthcare Systems" <noreply@hms.local>',
-
   // Logging
   logLevel: process.env.LOG_LEVEL || 'info',
+
+  // SMTP / Email Configuration
+  smtpHost: process.env.SMTP_HOST || '',
+  smtpPort: parseInt(process.env.SMTP_PORT, 10) || 587,
+  smtpSecure: process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465',
+  smtpUser: process.env.SMTP_USER || '',
+  smtpPassword: process.env.SMTP_PASSWORD || process.env.SMTP_PASS || '',
+  smtpFrom: process.env.SMTP_FROM || 'Hospital Management System <no-reply@hms.org>',
 };
 
 module.exports = env;

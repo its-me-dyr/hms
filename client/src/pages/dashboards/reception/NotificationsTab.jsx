@@ -274,7 +274,7 @@ export default function NotificationsTab({ onNavigateTab }) {
                       <span
                         style={{
                           fontWeight: isUnread ? 700 : 600,
-                          color: '#0f172a',
+                          color: 'var(--text-primary)',
                           fontSize: '0.98rem',
                         }}
                       >
@@ -292,7 +292,7 @@ export default function NotificationsTab({ onNavigateTab }) {
                         />
                       )}
                     </div>
-                    <div style={{ color: '#475569', fontSize: '0.88rem', lineHeight: 1.5 }}>
+                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.5 }}>
                       {item.message}
                     </div>
                     <div

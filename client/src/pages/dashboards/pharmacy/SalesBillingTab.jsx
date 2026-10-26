@@ -8,7 +8,7 @@
  * - Collect Payment modal with payment history tracking and receipt printing
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   CreditCard,
   Search,
@@ -19,7 +19,6 @@ import {
   X,
   CheckCircle2,
   AlertCircle,
-  FileText,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
@@ -28,6 +27,7 @@ export default function SalesBillingTab({ onNavigateTab }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
   // Payment & Invoice Modals
@@ -37,10 +37,10 @@ export default function SalesBillingTab({ onNavigateTab }) {
   const [payMethod, setPayMethod] = useState('Cash');
   const [processingPay, setProcessingPay] = useState(false);
 
-  const fetchBills = () => {
+  const fetchBills = useCallback(() => {
     setLoading(true);
     setError('');
-    pharmacyService.getBills({ search, status: statusFilter })
+    pharmacyService.getBills({ search: activeSearch, status: statusFilter })
       .then((res) => {
         const list = res.data || [];
         setBills(Array.isArray(list) ? list : []);
@@ -52,15 +52,15 @@ export default function SalesBillingTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [activeSearch, statusFilter]);
 
   useEffect(() => {
     fetchBills();
-  }, [statusFilter]);
+  }, [fetchBills]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchBills();
+    setActiveSearch(search);
   };
 
   const handleOpenPay = (bill) => {

@@ -8,7 +8,7 @@
  * - Add/Edit test modal with parameter builder
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Layers,
   Search,
@@ -50,7 +50,7 @@ export default function TestCatalogTab() {
     { name: '', unit: '', referenceRange: '', criticalLow: '', criticalHigh: '' },
   ]);
 
-  const fetchTests = () => {
+  const fetchTests = useCallback(() => {
     setLoading(true);
     labService.getTests({
       search: search || undefined,
@@ -66,11 +66,14 @@ export default function TestCatalogTab() {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [search, categoryFilter]);
 
   useEffect(() => {
-    fetchTests();
-  }, [categoryFilter]);
+    const timer = setTimeout(() => {
+      fetchTests();
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [fetchTests]);
 
   const openAddModal = () => {
     setEditingTest(null);

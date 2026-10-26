@@ -10,22 +10,23 @@ const authController = require('../controllers/auth.controller');
 const { protect, optionalProtect, restrictTo } = require('../middleware/auth');
 const {
   loginValidation,
-  patientRegisterValidation,
-  requestOtpValidation,
-  verifyOtpValidation,
-  resendOtpValidation,
   refreshTokenValidation,
 } = require('../validations/auth.validation');
 
 const { uploadDocument } = require('../middleware/upload.middleware');
 
-// Disabled Public Registration routes (Strictly returns HTTP 403)
-router.post('/register/request-otp', authController.requestOtp);
-router.post('/register/verify-otp', authController.verifyOtp);
-router.post('/register/resend-otp', authController.resendOtp);
-router.post('/register', authController.register);
-
 // Authentication & Session routes
+const rejectPublicRegistration = (req, res) => {
+  return res.status(403).json({
+    success: false,
+    message: 'Public registration is disabled. Staff must be provisioned by administrators, and patients must be registered by Reception.',
+  });
+};
+router.post('/register', rejectPublicRegistration);
+router.post('/register/request-otp', rejectPublicRegistration);
+router.post('/register/verify-otp', rejectPublicRegistration);
+router.post('/register/resend-otp', rejectPublicRegistration);
+
 router.post('/login', loginValidation, authController.login);
 router.post('/refresh-token', refreshTokenValidation, authController.refreshToken);
 

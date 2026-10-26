@@ -208,7 +208,7 @@ export default function SchedulingTab({ activeRequest, onNavigateTab }) {
           ) : schedules.length === 0 ? (
             <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
               <Calendar size={36} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-              <p style={{ fontWeight: 600, color: '#475569' }}>No imaging studies scheduled for {dateFilter}.</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No imaging studies scheduled for {dateFilter}.</p>
               <p style={{ fontSize: '0.85rem' }}>Select another date or book an appointment from the Requests tab.</p>
             </div>
           ) : (
@@ -305,7 +305,7 @@ export default function SchedulingTab({ activeRequest, onNavigateTab }) {
             </div>
             <form onSubmit={handleBookingSubmit}>
               <div className="lab-modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ background: '#f8fafc', padding: '0.8rem', borderRadius: '8px' }}>
+                <div style={{ background: 'var(--bg-surface)', padding: '0.8rem', borderRadius: '8px' }}>
                   <div style={{ fontSize: '0.85rem' }}><strong>Procedure:</strong> {targetRequest.studyType || targetRequest.procedureName}</div>
                   <div style={{ fontSize: '0.85rem' }}><strong>Modality:</strong> {targetRequest.modality}</div>
                   <div style={{ fontSize: '0.85rem' }}><strong>Priority:</strong> {targetRequest.priority?.toUpperCase()}</div>

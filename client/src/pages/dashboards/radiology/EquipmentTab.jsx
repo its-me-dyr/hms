@@ -125,7 +125,7 @@ export default function EquipmentTab({ _onNavigateTab }) {
       ) : equipmentList.length === 0 ? (
         <div className="lab-card" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
           <Layers size={36} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-          <p style={{ fontWeight: 600, color: '#475569' }}>No equipment registered in system.</p>
+          <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No equipment registered in system.</p>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
@@ -163,14 +163,14 @@ export default function EquipmentTab({ _onNavigateTab }) {
                   </span>
                 </div>
 
-                <div style={{ fontSize: '0.85rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1rem' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1rem' }}>
                   <div>Model: <strong>{eq.model || 'Standard Medical Imaging Unit'}</strong></div>
                   <div>Manufacturer: <strong>{eq.manufacturer || 'OEM Hospital Grade'}</strong></div>
                   <div>
                     Last Calibration: <strong>{eq.lastCalibrationDate ? new Date(eq.lastCalibrationDate).toLocaleDateString() : 'Current'}</strong>
                   </div>
                   {eq.maintenanceNotes && (
-                    <div style={{ background: '#f8fafc', padding: '0.5rem', borderRadius: '6px', fontSize: '0.8rem', color: '#334155' }}>
+                    <div style={{ background: 'var(--bg-surface)', padding: '0.5rem', borderRadius: '6px', fontSize: '0.8rem', color: '#334155' }}>
                       Notes: {eq.maintenanceNotes}
                     </div>
                   )}

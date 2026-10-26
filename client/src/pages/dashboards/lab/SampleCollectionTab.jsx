@@ -8,7 +8,7 @@
  * - Barcode label generation preview
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   FlaskConical,
   Barcode,
@@ -29,6 +29,7 @@ export default function SampleCollectionTab({ activeRequest, onNavigateTab }) {
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState(null);
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
 
   // Selected request for collection modal
   const [selectedReq, setSelectedReq] = useState(activeRequest || null);
@@ -55,9 +56,9 @@ export default function SampleCollectionTab({ activeRequest, onNavigateTab }) {
     }
   }, [activeRequest]);
 
-  const fetchAwaitingSamples = () => {
+  const fetchAwaitingSamples = useCallback(() => {
     setLoading(true);
-    labService.getSamples({ stage: 'awaiting', search: search || undefined })
+    labService.getSamples({ stage: 'awaiting', search: activeSearch || undefined })
       .then((res) => {
         setSamples(res.data || []);
       })
@@ -68,11 +69,11 @@ export default function SampleCollectionTab({ activeRequest, onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [activeSearch]);
 
   useEffect(() => {
     fetchAwaitingSamples();
-  }, []);
+  }, [fetchAwaitingSamples]);
 
   const openCollectionDialog = (req) => {
     setSelectedReq(req);
@@ -199,7 +200,7 @@ export default function SampleCollectionTab({ activeRequest, onNavigateTab }) {
         <button
           type="button"
           className="lab-btn lab-btn--primary lab-btn--sm"
-          onClick={fetchAwaitingSamples}
+          onClick={() => setActiveSearch(search)}
         >
           Search Queue
         </button>

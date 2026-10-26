@@ -203,7 +203,7 @@ export default function NurseAlertsTab() {
           <button
             onClick={loadData}
             className="rec-btn"
-            style={{ background: '#ffffff', color: '#991b1b', fontWeight: 700 }}
+            style={{ background: 'var(--bg-card)', color: '#991b1b', fontWeight: 700 }}
           >
             Refresh Status
           </button>
@@ -264,7 +264,7 @@ export default function NurseAlertsTab() {
                       <Bell size={20} className={isActive ? 'rec-spin' : ''} style={{ animationDuration: '3s' }} />
                     </div>
                     <div>
-                      <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#0f172a' }}>
+                      <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>
                         {alt.room} • {alt.bed}
                       </span>
                       <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Ward 3A Station</div>
@@ -293,7 +293,7 @@ export default function NurseAlertsTab() {
 
                 {/* Patient Information & Details */}
                 <div style={{ marginBottom: '1rem', flex: 1 }}>
-                  <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.25rem' }}>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
                     Patient: {alt.patientName}
                   </div>
                   <p style={{ margin: '0 0 0.5rem', fontSize: '0.82rem', color: '#334155', lineHeight: 1.45 }}>
@@ -305,7 +305,7 @@ export default function NurseAlertsTab() {
                       display: 'grid',
                       gridTemplateColumns: '1fr 1fr',
                       gap: '0.5rem',
-                      background: '#f8fafc',
+                      background: 'var(--bg-surface)',
                       padding: '0.65rem 0.75rem',
                       borderRadius: '8px',
                       border: '1px solid #e2e8f0',

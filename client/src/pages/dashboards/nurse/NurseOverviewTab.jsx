@@ -424,7 +424,7 @@ export default function NurseOverviewTab({
                   {inpatients.map((item) => (
                     <tr key={item.id}>
                       <td>
-                        <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.85rem' }}>
+                        <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.85rem' }}>
                           {item.bed}
                         </div>
                         <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{item.room}</div>
@@ -435,7 +435,7 @@ export default function NurseOverviewTab({
                             {getInitials(item.name)}
                           </div>
                           <div>
-                            <div style={{ fontWeight: 600, color: '#0f172a' }}>{item.name}</div>
+                            <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.name}</div>
                             <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
                               {item.patientId} • {item.age}y {item.gender[0]}
                             </div>
@@ -522,7 +522,7 @@ export default function NurseOverviewTab({
                       </span>
                       <span className="nurse-badge nurse-badge--stat">{alt.type}</span>
                     </div>
-                    <div style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.82rem' }}>
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.82rem' }}>
                       {alt.patientName}
                     </div>
                     <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.15rem' }}>
@@ -571,7 +571,7 @@ export default function NurseOverviewTab({
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-                    <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.8rem' }}>
+                    <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.8rem' }}>
                       {inst.patientName} ({inst.roomBed})
                     </span>
                     <span className={`nurse-badge nurse-badge--${inst.priority === 'STAT' ? 'stat' : 'routine'}`}>
@@ -652,7 +652,7 @@ export default function NurseOverviewTab({
                     <span
                       style={{
                         fontWeight: 700,
-                        color: '#0f172a',
+                        color: 'var(--text-primary)',
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '0.3rem',
@@ -666,9 +666,9 @@ export default function NurseOverviewTab({
                   <td>
                     <span style={{ fontWeight: 700, color: '#0284c7' }}>{med.roomBed}</span>
                   </td>
-                  <td style={{ fontWeight: 600, color: '#0f172a' }}>{med.patientName}</td>
+                  <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{med.patientName}</td>
                   <td>
-                    <div style={{ fontWeight: 700, color: '#0f172a' }}>{med.drugName}</div>
+                    <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{med.drugName}</div>
                     <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{med.dosage} • {med.frequency}</div>
                   </td>
                   <td>
@@ -678,7 +678,7 @@ export default function NurseOverviewTab({
                         background: '#f1f5f9',
                         padding: '0.15rem 0.5rem',
                         borderRadius: '6px',
-                        color: '#475569',
+                        color: 'var(--text-secondary)',
                         fontWeight: 600,
                       }}
                     >
@@ -721,7 +721,7 @@ export default function NurseOverviewTab({
                 fontSize: '0.72rem',
                 fontWeight: 700,
                 background: '#f1f5f9',
-                color: '#475569',
+                color: 'var(--text-secondary)',
                 padding: '0.15rem 0.45rem',
                 borderRadius: '9999px',
               }}

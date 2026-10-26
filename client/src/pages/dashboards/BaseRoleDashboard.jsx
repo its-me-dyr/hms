@@ -41,7 +41,7 @@ export default function BaseRoleDashboard({ roleKey, customCards = [], quickActi
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
               <span className="badge" style={{ background: roleConfig.badgeColor, color: '#ffffff', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                {user?.role || normalizedKey}
+                {(typeof user?.role === 'string' ? user.role : (user?.roleName || normalizedKey))}
               </span>
               <span className="badge badge--success" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                 <CheckCircle2 size={12} /> Active Session
@@ -183,7 +183,7 @@ export default function BaseRoleDashboard({ roleKey, customCards = [], quickActi
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                   <div><strong>Full Name:</strong> {user?.fullName || `${user?.firstName || ''} ${user?.lastName || ''}`}</div>
                   <div><strong>Email:</strong> {user?.email}</div>
-                  <div><strong>Assigned System Role:</strong> <span className="badge badge--primary">{user?.role || 'patient'}</span></div>
+                  <div><strong>Assigned System Role:</strong> <span className="badge badge--primary">{(typeof user?.role === 'string' ? user.role : (user?.roleName || 'patient'))}</span></div>
                   <div><strong>Account Status:</strong> <span style={{ color: 'var(--color-success)', fontWeight: 600 }}>Active & Verified</span></div>
                   <div><strong>Backend Storage:</strong> MongoDB Document Store</div>
                 </div>

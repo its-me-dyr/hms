@@ -63,6 +63,31 @@ const hospitalSettingSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    adminUser: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    adminEmail: {
+      type: String,
+      default: '',
+      trim: true,
+      lowercase: true,
+    },
+    status: {
+      type: String,
+      enum: ['active', 'inactive', 'pending', 'suspended'],
+      default: 'active',
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
     branches: [
       {
         name: { type: String, required: true, trim: true },

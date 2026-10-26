@@ -256,7 +256,7 @@ export default function ReportEntryTab({ activeStudy, _onNavigateTab }) {
                 {/* Standard Macros Picker */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <Sparkles size={14} style={{ color: '#6366f1' }} />
-                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569' }}>Quick Macro:</span>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Quick Macro:</span>
                   <select
                     className="lab-select"
                     style={{ fontSize: '0.8rem', padding: '0.25rem 0.5rem' }}
@@ -411,7 +411,7 @@ export default function ReportEntryTab({ activeStudy, _onNavigateTab }) {
         ) : (
           <div className="lab-card" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
             <FileText size={40} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-            <p style={{ fontWeight: 600, color: '#475569' }}>Select a study from the worklist to start drafting the report.</p>
+            <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Select a study from the worklist to start drafting the report.</p>
           </div>
         )}
 

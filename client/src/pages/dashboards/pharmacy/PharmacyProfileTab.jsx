@@ -59,11 +59,11 @@ export default function PharmacyProfileTab() {
       const res = await pharmacyService.updateProfile(profileForm);
       const updatedData = res.data?.data || res.data || profileForm;
       updateUser({
-        firstName: profileForm.firstName,
-        lastName: profileForm.lastName,
-        fullName: `${profileForm.firstName} ${profileForm.lastName}`,
-        phone: profileForm.phone,
-        department: profileForm.department,
+        firstName: updatedData.firstName || profileForm.firstName,
+        lastName: updatedData.lastName || profileForm.lastName,
+        fullName: `${updatedData.firstName || profileForm.firstName} ${updatedData.lastName || profileForm.lastName}`.trim(),
+        phone: updatedData.phone || profileForm.phone,
+        department: updatedData.department || profileForm.department,
       });
       setProfileSuccess('Profile information updated successfully!');
       setTimeout(() => setProfileSuccess(''), 4000);

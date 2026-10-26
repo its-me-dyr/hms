@@ -135,6 +135,16 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '03:00 PM', '04:00 PM'],
     },
+    hospital: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'HospitalSetting',
+      default: null,
+    },
+    hospitalId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'HospitalSetting',
+      default: null,
+    },
     hospitalBranch: {
       type: String,
       default: 'MAIN-01',
@@ -176,6 +186,10 @@ const userSchema = new mongoose.Schema(
     },
     passwordResetToken: String,
     passwordResetExpires: Date,
+    mustChangePassword: {
+      type: Boolean,
+      default: false,
+    },
     preferences: {
       type: mongoose.Schema.Types.Mixed,
       default: {
@@ -236,6 +250,7 @@ userSchema.methods.generateAccessToken = function (permissions = []) {
       email: this.email,
       role: (this.roleName || 'patient').toLowerCase(),
       permissions: permissions,
+      mustChangePassword: Boolean(this.mustChangePassword),
     },
     secret,
     { expiresIn }

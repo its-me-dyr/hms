@@ -54,12 +54,19 @@ const auditLogSchema = new mongoose.Schema(
       enum: ['SUCCESS', 'FAILURE', 'WARNING'],
       default: 'SUCCESS',
     },
+    hospital: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'HospitalSetting',
+      default: null,
+      index: true,
+    },
   },
   {
     timestamps: { createdAt: true, updatedAt: false }, // Logs are append-only
   }
 );
 
+auditLogSchema.index({ hospital: 1, createdAt: -1 });
 auditLogSchema.index({ user: 1, createdAt: -1 });
 auditLogSchema.index({ module: 1, action: 1 });
 

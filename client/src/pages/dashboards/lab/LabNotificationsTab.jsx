@@ -7,18 +7,15 @@
  * - Mark one read, mark all read
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Bell,
   CheckCheck,
   RefreshCw,
-  Clock,
   AlertTriangle,
   FlaskConical,
-  FileCheck,
   CheckCircle2,
   X,
-  FileText,
 } from 'lucide-react';
 import { labService } from '../../../services/lab.service';
 
@@ -28,7 +25,7 @@ export default function LabNotificationsTab() {
   const [filterUnread, setFilterUnread] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
-  const fetchNotifications = () => {
+  const fetchNotifications = useCallback(() => {
     setLoading(true);
     labService.getNotifications()
       .then((res) => {
@@ -43,11 +40,11 @@ export default function LabNotificationsTab() {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchNotifications();
-  }, []);
+  }, [fetchNotifications]);
 
   const handleMarkOneRead = async (id) => {
     try {

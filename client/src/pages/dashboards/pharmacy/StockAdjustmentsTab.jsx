@@ -7,21 +7,17 @@
  * - Modal to record new stock adjustments directly affecting active catalog quantities
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
-  SlidersHorizontal,
   Plus,
   RefreshCw,
-  Search,
-  AlertTriangle,
   AlertCircle,
   CheckCircle2,
   X,
-  Package,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
-export default function StockAdjustmentsTab({ onNavigateTab }) {
+export default function StockAdjustmentsTab({ onNavigateTab: _onNavigateTab }) {
   const [medicines, setMedicines] = useState([]);
   const [adjustments, setAdjustments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,15 +32,15 @@ export default function StockAdjustmentsTab({ onNavigateTab }) {
   const [reason, setReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchStockData = () => {
+  const fetchStockData = useCallback(() => {
     setLoading(true);
     setError('');
     pharmacyService.getMedicines()
       .then((res) => {
         const list = res.data?.medicines || res.data || [];
         setMedicines(Array.isArray(list) ? list : []);
-        if (list.length > 0 && !selectedMedId) {
-          setSelectedMedId(list[0].id);
+        if (list.length > 0) {
+          setSelectedMedId((curr) => curr || list[0].id);
         }
       })
       .catch((err) => {
@@ -54,44 +50,11 @@ export default function StockAdjustmentsTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchStockData();
-    // Default mock adjustments if initial
-    setAdjustments([
-      {
-        id: 'ADJ-101',
-        medicineName: 'Salbutamol / Albuterol Inhaler',
-        batchNumber: 'VEN-5502',
-        adjustmentType: 'Stock In',
-        quantity: '+20',
-        reason: 'New shipment stock transfer verified from central storage',
-        updatedBy: 'Chief Pharmacist',
-        date: '2026-09-16 11:30 AM',
-      },
-      {
-        id: 'ADJ-102',
-        medicineName: 'Metformin Hydrochloride 500mg',
-        batchNumber: 'GLU-1089',
-        adjustmentType: 'Correction',
-        quantity: '-2',
-        reason: 'Physical count discrepancy audit at shelf 3B',
-        updatedBy: 'Staff Pharmacist',
-        date: '2026-09-17 09:15 AM',
-      },
-      {
-        id: 'ADJ-103',
-        medicineName: 'Azithromycin Dihydrate 500mg',
-        batchNumber: 'AZI-3301',
-        adjustmentType: 'Expired',
-        quantity: '-8',
-        reason: 'Batch reached expiration date; transferred to quarantine',
-        updatedBy: 'Inventory Specialist',
-        date: '2026-09-17 10:00 AM',
-      },
-    ]);
-  }, []);
+  }, [fetchStockData]);
 
   const handleAdjustSubmit = (e) => {
     e.preventDefault();

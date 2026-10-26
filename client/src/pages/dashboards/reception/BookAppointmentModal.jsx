@@ -14,11 +14,6 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Calendar,
-  Clock,
-  User,
-  Stethoscope,
-  Building,
   CheckCircle2,
   AlertCircle,
   X,
@@ -26,7 +21,6 @@ import {
   ArrowRight,
   ArrowLeft,
   Printer,
-  FileText,
 } from 'lucide-react';
 import { receptionService } from '../../../services/reception.service';
 
@@ -53,7 +47,6 @@ export default function BookAppointmentModal({
   const [reason, setReason] = useState('');
   const [notes, setNotes] = useState('');
 
-  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [confirmedBooking, setConfirmedBooking] = useState(null);
@@ -186,7 +179,7 @@ export default function BookAppointmentModal({
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.75rem' }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#0f172a' }}>
+            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
               Schedule Hospital Appointment
             </h3>
             <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Front-desk consultation booking workflow</span>
@@ -209,7 +202,7 @@ export default function BookAppointmentModal({
             <div className="hms-modal__icon" style={{ background: '#ecfdf5', color: '#059669', margin: '0 auto 1rem' }}>
               <CheckCircle2 size={32} />
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
               Appointment Booked Successfully!
             </h3>
             <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0 0 1.5rem' }}>
@@ -218,7 +211,7 @@ export default function BookAppointmentModal({
 
             <div
               style={{
-                background: '#f8fafc',
+                background: 'var(--bg-surface)',
                 border: '1px solid var(--border-color)',
                 borderRadius: '10px',
                 padding: '1.15rem',
@@ -233,15 +226,15 @@ export default function BookAppointmentModal({
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.82rem' }}>
                 <span style={{ color: '#64748b' }}>Patient:</span>
-                <strong style={{ color: '#0f172a' }}>{confirmedBooking.patientName}</strong>
+                <strong style={{ color: 'var(--text-primary)' }}>{confirmedBooking.patientName}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.82rem' }}>
                 <span style={{ color: '#64748b' }}>Physician:</span>
-                <strong style={{ color: '#0f172a' }}>{confirmedBooking.doctorName}</strong>
+                <strong style={{ color: 'var(--text-primary)' }}>{confirmedBooking.doctorName}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.82rem' }}>
                 <span style={{ color: '#64748b' }}>Date & Time:</span>
-                <strong style={{ color: '#0f172a' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>
                   {new Date(confirmedBooking.appointmentDate).toLocaleDateString()} at {confirmedBooking.appointmentTime}
                 </strong>
               </div>
@@ -295,7 +288,7 @@ export default function BookAppointmentModal({
               {/* STEP 1: Search Patient */}
               {step === 1 && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.5rem', color: '#0f172a', fontSize: '0.95rem' }}>
+                  <h4 style={{ margin: '0 0 0.5rem', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                     Step 1: Select Patient
                   </h4>
                   <p style={{ margin: '0 0 1rem', fontSize: '0.8rem', color: '#64748b' }}>
@@ -342,7 +335,7 @@ export default function BookAppointmentModal({
                           }}
                         >
                           <div>
-                            <strong style={{ color: '#0f172a', fontSize: '0.85rem' }}>{p.name}</strong>
+                            <strong style={{ color: 'var(--text-primary)', fontSize: '0.85rem' }}>{p.name}</strong>
                             <div style={{ fontSize: '0.75rem', color: '#64748b' }}>ID: {p.patientId} • Phone: {p.phone}</div>
                           </div>
                           <button className="btn btn--outline btn--sm" style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem' }}>
@@ -362,7 +355,7 @@ export default function BookAppointmentModal({
               {/* STEP 2: Department */}
               {step === 2 && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.5rem', color: '#0f172a', fontSize: '0.95rem' }}>
+                  <h4 style={{ margin: '0 0 0.5rem', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                     Step 2: Select Medical Department
                   </h4>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.65rem', marginTop: '0.75rem' }}>
@@ -380,7 +373,7 @@ export default function BookAppointmentModal({
                           border: '1px solid',
                           borderColor: selectedDepartment === dept.name ? '#0891b2' : '#e2e8f0',
                           background: selectedDepartment === dept.name ? '#f0fdfa' : '#ffffff',
-                          color: '#0f172a',
+                          color: 'var(--text-primary)',
                           fontWeight: 600,
                           fontSize: '0.82rem',
                           textAlign: 'left',
@@ -397,7 +390,7 @@ export default function BookAppointmentModal({
               {/* STEP 3: Doctor */}
               {step === 3 && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.5rem', color: '#0f172a', fontSize: '0.95rem' }}>
+                  <h4 style={{ margin: '0 0 0.5rem', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                     Step 3: Select Physician ({selectedDepartment || 'All Departments'})
                   </h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.75rem' }}>
@@ -421,7 +414,7 @@ export default function BookAppointmentModal({
                         }}
                       >
                         <div>
-                          <strong style={{ color: '#0f172a', fontSize: '0.85rem' }}>{doc.name}</strong>
+                          <strong style={{ color: 'var(--text-primary)', fontSize: '0.85rem' }}>{doc.name}</strong>
                           <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
                             {doc.specialization} • {doc.department}
                           </div>
@@ -440,7 +433,7 @@ export default function BookAppointmentModal({
               {/* STEP 4: Date Selection */}
               {step === 4 && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.5rem', color: '#0f172a', fontSize: '0.95rem' }}>
+                  <h4 style={{ margin: '0 0 0.5rem', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                     Step 4: Select Appointment Date
                   </h4>
                   <div style={{ marginTop: '0.75rem' }}>
@@ -460,7 +453,7 @@ export default function BookAppointmentModal({
               {/* STEP 5: Time Slot */}
               {step === 5 && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.5rem', color: '#0f172a', fontSize: '0.95rem' }}>
+                  <h4 style={{ margin: '0 0 0.5rem', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                     Step 5: Select Available Time Slot
                   </h4>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', marginTop: '0.75rem' }}>
@@ -491,7 +484,7 @@ export default function BookAppointmentModal({
               {/* STEP 6: Details (Reason & Notes) */}
               {step === 6 && (
                 <div>
-                  <h4 style={{ margin: '0 0 0.5rem', color: '#0f172a', fontSize: '0.95rem' }}>
+                  <h4 style={{ margin: '0 0 0.5rem', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                     Step 6: Consultation Details
                   </h4>
 
@@ -573,7 +566,7 @@ export default function BookAppointmentModal({
             {/* Right Summary Sidebar Card */}
             <div
               style={{
-                background: '#f8fafc',
+                background: 'var(--bg-surface)',
                 border: '1px solid var(--border-color)',
                 borderRadius: '12px',
                 padding: '1.15rem',
@@ -584,14 +577,14 @@ export default function BookAppointmentModal({
               }}
             >
               <div>
-                <h4 style={{ margin: '0 0 0.85rem', color: '#0f172a', fontWeight: 700, fontSize: '0.9rem' }}>
+                <h4 style={{ margin: '0 0 0.85rem', color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.9rem' }}>
                   Booking Summary
                 </h4>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                   <div>
                     <span style={{ color: '#64748b', fontSize: '0.72rem', display: 'block' }}>PATIENT</span>
-                    <strong style={{ color: '#0f172a' }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>
                       {selectedPatient ? selectedPatient.name : '— Not selected'}
                     </strong>
                     {selectedPatient?.patientId && (
@@ -603,12 +596,12 @@ export default function BookAppointmentModal({
 
                   <div>
                     <span style={{ color: '#64748b', fontSize: '0.72rem', display: 'block' }}>DEPARTMENT</span>
-                    <strong style={{ color: '#0f172a' }}>{selectedDepartment || '—'}</strong>
+                    <strong style={{ color: 'var(--text-primary)' }}>{selectedDepartment || '—'}</strong>
                   </div>
 
                   <div>
                     <span style={{ color: '#64748b', fontSize: '0.72rem', display: 'block' }}>DOCTOR</span>
-                    <strong style={{ color: '#0f172a' }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>
                       {selectedDoctor ? selectedDoctor.name : '—'}
                     </strong>
                     {selectedDoctor?.specialization && (
@@ -620,7 +613,7 @@ export default function BookAppointmentModal({
 
                   <div>
                     <span style={{ color: '#64748b', fontSize: '0.72rem', display: 'block' }}>DATE & TIME</span>
-                    <strong style={{ color: '#0f172a' }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>
                       {selectedDate} {selectedSlot && `at ${selectedSlot}`}
                     </strong>
                   </div>

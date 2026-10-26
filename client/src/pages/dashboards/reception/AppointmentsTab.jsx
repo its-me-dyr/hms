@@ -14,10 +14,8 @@ import {
   Calendar,
   Clock,
   Search,
-  Filter,
   CheckCircle2,
   XCircle,
-  Clock3,
   CalendarClock,
   Eye,
   Plus,
@@ -25,11 +23,7 @@ import {
   AlertCircle,
   ChevronLeft,
   ChevronRight,
-  User,
-  Stethoscope,
   Building,
-  Phone,
-  FileText,
 } from 'lucide-react';
 import { receptionService } from '../../../services/reception.service';
 
@@ -49,7 +43,7 @@ export default function AppointmentsTab({ onOpenBookAppointment, onSelectPatient
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(10);
 
   // Action states / Modals
   const [actionLoadingId, setActionLoadingId] = useState(null);
@@ -501,7 +495,7 @@ export default function AppointmentsTab({ onOpenBookAppointment, onSelectPatient
                             <div
                               style={{
                                 fontWeight: 600,
-                                color: '#0f172a',
+                                color: 'var(--text-primary)',
                                 cursor: 'pointer',
                               }}
                               onClick={() => {
@@ -542,7 +536,7 @@ export default function AppointmentsTab({ onOpenBookAppointment, onSelectPatient
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             fontSize: '0.85rem',
-                            color: '#475569',
+                            color: 'var(--text-secondary)',
                           }}
                           title={app.reason || 'General Consultation'}
                         >
@@ -740,7 +734,7 @@ export default function AppointmentsTab({ onOpenBookAppointment, onSelectPatient
                   {(selectedAppointment.patient?.firstName || 'P').charAt(0)}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '1.05rem' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1.05rem' }}>
                     {selectedAppointment.patient?.firstName} {selectedAppointment.patient?.lastName}
                   </div>
                   <div style={{ fontSize: '0.82rem', color: '#64748b' }}>
@@ -777,7 +771,7 @@ export default function AppointmentsTab({ onOpenBookAppointment, onSelectPatient
               >
                 <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '0.75rem' }}>
                   <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>DOCTOR</div>
-                  <div style={{ fontWeight: 600, color: '#0f172a', marginTop: '0.25rem' }}>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '0.25rem' }}>
                     Dr. {selectedAppointment.doctor?.firstName} {selectedAppointment.doctor?.lastName}
                   </div>
                   <div style={{ fontSize: '0.8rem', color: '#0891b2' }}>
@@ -787,7 +781,7 @@ export default function AppointmentsTab({ onOpenBookAppointment, onSelectPatient
 
                 <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '0.75rem' }}>
                   <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>SCHEDULE</div>
-                  <div style={{ fontWeight: 600, color: '#0f172a', marginTop: '0.25rem' }}>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '0.25rem' }}>
                     {selectedAppointment.date ? new Date(selectedAppointment.date).toLocaleDateString() : 'N/A'}
                   </div>
                   <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
@@ -863,7 +857,7 @@ export default function AppointmentsTab({ onOpenBookAppointment, onSelectPatient
               <div className="rec-modal-body">
                 <p style={{ fontSize: '0.88rem', color: '#64748b', marginBottom: '1.25rem' }}>
                   Rescheduling consultation for{' '}
-                  <strong style={{ color: '#0f172a' }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>
                     {rescheduleModal.appointment?.patient?.firstName} {rescheduleModal.appointment?.patient?.lastName}
                   </strong>{' '}
                   with{' '}
@@ -958,7 +952,7 @@ export default function AppointmentsTab({ onOpenBookAppointment, onSelectPatient
               <div className="rec-modal-body">
                 <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '1rem' }}>
                   Are you sure you want to cancel the appointment for{' '}
-                  <strong style={{ color: '#0f172a' }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>
                     {cancelModal.appointment?.patient?.firstName} {cancelModal.appointment?.patient?.lastName}
                   </strong>
                   ?

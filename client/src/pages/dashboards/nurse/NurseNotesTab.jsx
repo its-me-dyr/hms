@@ -262,7 +262,7 @@ export default function NurseNotesTab() {
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <span style={{ fontWeight: 800, fontSize: '1.05rem', color: '#0f172a' }}>
+                      <span style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
                         {note.patientName}
                       </span>
                       <span style={{ fontSize: '0.8rem', color: '#0284c7', fontWeight: 700, background: '#f0f9ff', padding: '0.15rem 0.55rem', borderRadius: '6px' }}>
@@ -291,7 +291,7 @@ export default function NurseNotesTab() {
 
                   {/* SOAP Grid */}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.85rem' }}>
-                    <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ background: 'var(--bg-surface)', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                       <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#0284c7', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
                         (S) Subjective
                       </div>
@@ -300,7 +300,7 @@ export default function NurseNotesTab() {
                       </div>
                     </div>
 
-                    <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ background: 'var(--bg-surface)', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                       <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#0d9488', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
                         (O) Objective
                       </div>
@@ -309,7 +309,7 @@ export default function NurseNotesTab() {
                       </div>
                     </div>
 
-                    <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ background: 'var(--bg-surface)', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                       <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#d97706', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
                         (A) Assessment
                       </div>
@@ -318,7 +318,7 @@ export default function NurseNotesTab() {
                       </div>
                     </div>
 
-                    <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ background: 'var(--bg-surface)', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                       <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#7c3aed', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
                         (P) Plan
                       </div>

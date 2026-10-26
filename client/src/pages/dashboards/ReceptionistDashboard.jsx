@@ -36,7 +36,7 @@ import ReceptionProfileTab from './reception/ReceptionProfileTab';
 
 // Modals
 import BookAppointmentModal from './reception/BookAppointmentModal';
-import { X, User, Phone, Mail, MapPin, Heart, Calendar } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 export default function ReceptionistDashboard() {
   const { user } = useAuth();
@@ -260,7 +260,7 @@ export default function ReceptionistDashboard() {
               >
                 <div style={{ padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
                   <span style={{ color: '#64748b', fontSize: '0.75rem', display: 'block' }}>GENDER & AGE</span>
-                  <strong style={{ color: '#0f172a' }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>
                     {selectedPatientRecord.gender || 'Not specified'} • {selectedPatientRecord.age ? `${selectedPatientRecord.age} yrs` : 'N/A'}
                   </strong>
                 </div>
@@ -274,14 +274,14 @@ export default function ReceptionistDashboard() {
 
                 <div style={{ padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
                   <span style={{ color: '#64748b', fontSize: '0.75rem', display: 'block' }}>PHONE NUMBER</span>
-                  <strong style={{ color: '#0f172a' }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>
                     {selectedPatientRecord.phone || 'N/A'}
                   </strong>
                 </div>
 
                 <div style={{ padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
                   <span style={{ color: '#64748b', fontSize: '0.75rem', display: 'block' }}>EMAIL</span>
-                  <strong style={{ color: '#0f172a', wordBreak: 'break-all' }}>
+                  <strong style={{ color: 'var(--text-primary)', wordBreak: 'break-all' }}>
                     {selectedPatientRecord.email || 'N/A'}
                   </strong>
                 </div>

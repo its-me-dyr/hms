@@ -8,27 +8,21 @@
  * - Full slide-over clinical inspection drawer
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Microscope,
   Clock,
   AlertTriangle,
-  FileCheck,
   RefreshCw,
-  Search,
   CheckCircle2,
   Eye,
   ArrowRight,
-  TrendingUp,
   Package,
   X,
   User,
-  Stethoscope,
   Activity,
-  Layers,
   ChevronRight,
   FileText,
-  AlertCircle,
   FlaskConical,
   Barcode,
 } from 'lucide-react';
@@ -40,7 +34,7 @@ export default function LabOverviewTab({ user, onNavigateTab }) {
   const [error, setError] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
 
-  const fetchOverview = () => {
+  const fetchOverview = useCallback(() => {
     setLoading(true);
     setError('');
     labService.getDashboard()
@@ -54,11 +48,11 @@ export default function LabOverviewTab({ user, onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchOverview();
-  }, []);
+  }, [fetchOverview]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -86,7 +80,6 @@ export default function LabOverviewTab({ user, onNavigateTab }) {
   const awaitingSamples = data?.awaitingCollectionList || [];
   const processingQueue = data?.processingQueue || [];
   const criticalAlerts = data?.criticalAlerts || [];
-  const recentActivity = data?.recentActivity || [];
 
   return (
     <div className="lab-container">

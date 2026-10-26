@@ -33,10 +33,37 @@ export const superadminService = {
   // 6. Audit Logs
   getAuditLogs: (params) => api.get('/super-admin/audit-logs', { params }),
 
-  // 7. Hospital Settings
-  getHospitalSettings: () => api.get('/super-admin/settings'),
-  updateHospitalSettings: (data) => api.put('/super-admin/settings', data),
+  // 7. Hospital Management
+  getHospitals: (params) => api.get('/super-admin/hospitals', { params }),
+  getHospitalById: (id) => api.get(`/super-admin/hospitals/${id}`),
+  createHospitalWithAdmin: (data) => api.post('/super-admin/hospitals', data),
+  updateHospital: (id, data) => api.put(`/super-admin/hospitals/${id}`, data),
+  toggleHospitalStatus: (id, data) => api.patch(`/super-admin/hospitals/${id}/status`, data),
 
-  // 8. Reports & Analytics
-  getReportsAndAnalytics: () => api.get('/super-admin/reports'),
+  // 8. Hospital Admin Management
+  getHospitalAdmins: (params) => api.get('/super-admin/hospital-admins', { params }),
+  getHospitalAdminById: (id) => api.get(`/super-admin/hospital-admins/${id}`),
+  toggleHospitalAdminStatus: (id, data) => api.patch(`/super-admin/hospital-admins/${id}/status`, data),
+
+  // 9. Super Admin Settings
+  getSettings: () => api.get('/super-admin/settings'),
+  updateSettings: (data) => api.patch('/super-admin/settings', data),
+  changePassword: (data) => api.post('/super-admin/settings/change-password', data),
+  getHospitalSettings: () => api.get('/super-admin/hospital-settings'),
+  updateHospitalSettings: (data) => api.put('/super-admin/hospital-settings', data),
+
+  // 10. Reports & Analytics
+  getReportsAndAnalytics: (params) => api.get('/super-admin/reports', { params }),
+
+  // 11. Notifications
+  getNotifications: (params) => api.get('/super-admin/notifications', { params }),
+  getUnreadNotificationCount: () => api.get('/super-admin/notifications/unread-count'),
+  markNotificationRead: (id) => api.patch(`/super-admin/notifications/${id}/read`),
+  markAllNotificationsRead: () => api.patch('/super-admin/notifications/read-all'),
+  deleteNotification: (id) => api.delete(`/super-admin/notifications/${id}`),
+
+  // 12. Super Admin Profile & Password Security
+  getProfile: () => api.get('/super-admin/profile'),
+  updateProfile: (data) => api.put('/super-admin/profile', data),
+  changeProfilePassword: (data) => api.put('/super-admin/profile/password', data),
 };

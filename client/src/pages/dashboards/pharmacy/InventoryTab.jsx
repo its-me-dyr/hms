@@ -7,15 +7,13 @@
  * - Fast Stock Adjustment modal (Stock In, Stock Out, Physical Correction) with mandatory reason audit logging
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Package,
   Search,
   RefreshCw,
   SlidersHorizontal,
   AlertTriangle,
-  ArrowUpRight,
-  ArrowDownLeft,
   X,
   Plus,
   CheckCircle2,
@@ -28,6 +26,7 @@ export default function InventoryTab({ onNavigateTab }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
   // Adjustment Modal State
@@ -37,10 +36,10 @@ export default function InventoryTab({ onNavigateTab }) {
   const [adjustReason, setAdjustReason] = useState('');
   const [adjusting, setAdjusting] = useState(false);
 
-  const fetchInventory = () => {
+  const fetchInventory = useCallback(() => {
     setLoading(true);
     setError('');
-    pharmacyService.getInventory({ search, status: statusFilter })
+    pharmacyService.getInventory({ search: activeSearch, status: statusFilter })
       .then((res) => {
         const list = res.data || [];
         setInventory(Array.isArray(list) ? list : []);
@@ -53,15 +52,15 @@ export default function InventoryTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [activeSearch, statusFilter]);
 
   useEffect(() => {
     fetchInventory();
-  }, [statusFilter]);
+  }, [fetchInventory]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchInventory();
+    setActiveSearch(search);
   };
 
   const handleOpenAdjust = (med) => {

@@ -275,13 +275,13 @@ export default function NurseMedicationsTab() {
                 {meds.map((med) => (
                   <tr key={med.id}>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#0f172a' }}>{med.patientName}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{med.patientName}</div>
                       <div style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 700 }}>
                         {med.roomBed}
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.88rem' }}>
+                      <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.88rem' }}>
                         {med.drugName}
                       </div>
                     </td>
@@ -316,7 +316,7 @@ export default function NurseMedicationsTab() {
                       <span
                         style={{
                           fontWeight: 700,
-                          color: '#0f172a',
+                          color: 'var(--text-primary)',
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '0.3rem',

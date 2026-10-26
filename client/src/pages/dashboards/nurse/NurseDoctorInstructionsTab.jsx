@@ -298,7 +298,7 @@ export default function NurseDoctorInstructionsTab() {
                         )}
                       </td>
                       <td>
-                        <div style={{ fontWeight: 700, color: '#0f172a' }}>{inst.patientName}</div>
+                        <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{inst.patientName}</div>
                         <div style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 600 }}>{inst.roomBed}</div>
                       </td>
                       <td style={{ maxWidth: '340px' }}>
@@ -316,7 +316,7 @@ export default function NurseDoctorInstructionsTab() {
                           style={{
                             fontSize: '0.72rem',
                             background: '#f1f5f9',
-                            color: '#475569',
+                            color: 'var(--text-secondary)',
                             padding: '0.2rem 0.55rem',
                             borderRadius: '6px',
                             fontWeight: 600,
@@ -327,7 +327,7 @@ export default function NurseDoctorInstructionsTab() {
                         </span>
                       </td>
                       <td>
-                        <div style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.82rem' }}>{inst.doctor}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.82rem' }}>{inst.doctor}</div>
                         <div style={{ fontSize: '0.7rem', color: '#64748b' }}>{inst.department}</div>
                       </td>
                       <td>

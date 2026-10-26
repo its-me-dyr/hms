@@ -7,15 +7,13 @@
  * - One-click "Create Purchase Order" trigger linked directly to the procurement pipeline
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
-  AlertTriangle,
   RefreshCw,
   Search,
   ShoppingCart,
-  Eye,
-  Package,
   CheckCircle2,
+  AlertCircle,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
@@ -25,7 +23,7 @@ export default function LowStockAlertsTab({ onNavigateTab }) {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
 
-  const fetchLowStock = () => {
+  const fetchLowStock = useCallback(() => {
     setLoading(true);
     setError('');
     pharmacyService.getMedicines()
@@ -42,11 +40,11 @@ export default function LowStockAlertsTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchLowStock();
-  }, []);
+  }, [fetchLowStock]);
 
   const filteredItems = search
     ? items.filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || m.genericName.toLowerCase().includes(search.toLowerCase()))
@@ -86,6 +84,14 @@ export default function LowStockAlertsTab({ onNavigateTab }) {
           </button>
         </div>
       </div>
+
+      {/* ── Error Alert ── */}
+      {error && (
+        <div style={{ padding: '0.85rem 1rem', background: '#fee2e2', borderRadius: '8px', color: '#b91c1c', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <AlertCircle size={16} />
+          <span>{error}</span>
+        </div>
+      )}
 
       {/* ── Status Ticker Strip ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>

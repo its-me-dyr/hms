@@ -236,11 +236,11 @@ export default function NurseMonitoringTab() {
         <div className="nurse-kpi-card nurse-kpi-card--blue">
           <div className="nurse-kpi-top">
             <div className="nurse-kpi-label">Monitored Patients</div>
-            <div className="nurse-kpi-icon-wrap" style={{ background: '#f8fafc', color: '#475569' }}>
+            <div className="nurse-kpi-icon-wrap" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>
               <CheckCircle2 size={20} />
             </div>
           </div>
-          <div className="nurse-kpi-val" style={{ color: '#0f172a' }}>{ioLogs.length}</div>
+          <div className="nurse-kpi-val" style={{ color: 'var(--text-primary)' }}>{ioLogs.length}</div>
           <div className="nurse-kpi-footer">
             <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Active strict I/O protocols</span>
           </div>
@@ -300,7 +300,7 @@ export default function NurseMonitoringTab() {
                       </span>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 700, color: '#0f172a' }}>{l.patientName}</div>
+                      <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{l.patientName}</div>
                     </td>
                     <td>
                       <span style={{ color: '#334155', fontWeight: 600 }}>{l.intakeOral} ml</span>

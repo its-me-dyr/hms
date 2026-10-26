@@ -123,7 +123,7 @@ export default function ImagingQueueTab({ onNavigateTab }) {
           ) : queue.length === 0 ? (
             <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
               <Clock size={36} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-              <p style={{ fontWeight: 600, color: '#475569' }}>No patients waiting in queue.</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No patients waiting in queue.</p>
               <p style={{ fontSize: '0.85rem' }}>Patients will appear here once checked in from Scheduling or Requests.</p>
             </div>
           ) : (

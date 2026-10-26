@@ -15,9 +15,12 @@ import { pharmacyService } from '../services/pharmacy.service';
 import { labService } from '../services/lab.service';
 import { radiologyService } from '../services/radiology.service';
 import { hospitalAdminService } from '../services/hospitalAdmin.service';
+import { superadminService } from '../services/superadmin.service';
+import { doctorService } from '../services/doctor.service';
 import { useTheme } from '../context/useTheme';
 
 import {
+  LayoutDashboard,
   Heart,
   Menu,
   X,
@@ -27,7 +30,6 @@ import {
   Settings,
   Sun,
   Moon,
-  Search,
   Pill,
   Package,
   AlertTriangle,
@@ -35,6 +37,8 @@ import {
   CreditCard,
   ArrowRight,
   CheckCheck,
+  Building2,
+  ShieldCheck,
 } from 'lucide-react';
 
 function formatRelativeTime(dateStr) {
@@ -56,6 +60,8 @@ function formatRelativeTime(dateStr) {
 
 function getNotificationIcon(cat) {
   const c = (cat || '').toLowerCase();
+  if (c.includes('secur') || c.includes('role') || c.includes('perm')) return <ShieldCheck size={16} />;
+  if (c.includes('hosp')) return <Building2 size={16} />;
   if (c.includes('prescript')) return <Pill size={16} />;
   if (c.includes('low') || c.includes('alert') || c.includes('warn')) return <AlertTriangle size={16} />;
   if (c.includes('expir') || c.includes('batch')) return <Clock size={16} />;
@@ -71,9 +77,6 @@ export default function DashboardLayout() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-
-  // Topbar Search State
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Notification Popover State
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
@@ -192,6 +195,42 @@ export default function DashboardLayout() {
         })
         .catch(() => {})
         .finally(() => setLoadingNotifs(false));
+    } else if (roleKey === 'super_admin') {
+      superadminService.getNotifications({ limit: 15 })
+        .then((res) => {
+          const list = Array.isArray(res.data?.data?.notifications)
+            ? res.data.data.notifications
+            : (Array.isArray(res.data?.notifications) ? res.data.notifications : (Array.isArray(res.data) ? res.data : []));
+          const normalized = list.map((n) => ({
+            ...n,
+            id: n.id || n._id,
+            read: n.isRead ?? n.read ?? false,
+            isRead: n.isRead ?? n.read ?? false,
+          }));
+          setNotificationsList(normalized);
+          const count = res.data?.data?.unreadCount ?? res.data?.unreadCount ?? normalized.filter((n) => !n.read && !n.isRead).length;
+          setUnreadCount(count);
+        })
+        .catch(() => {})
+        .finally(() => setLoadingNotifs(false));
+    } else if (roleKey === 'doctor') {
+      doctorService.getNotifications()
+        .then((res) => {
+          const list = Array.isArray(res.data?.data?.notifications)
+            ? res.data.data.notifications
+            : (Array.isArray(res.data?.notifications) ? res.data.notifications : (Array.isArray(res.data) ? res.data : []));
+          const normalized = list.map((n) => ({
+            ...n,
+            id: n.id || n._id,
+            read: n.isRead ?? n.read ?? false,
+            isRead: n.isRead ?? n.read ?? false,
+          }));
+          setNotificationsList(normalized);
+          const count = res.data?.data?.unreadCount ?? res.data?.unreadCount ?? normalized.filter((n) => !n.read && !n.isRead).length;
+          setUnreadCount(count);
+        })
+        .catch(() => {})
+        .finally(() => setLoadingNotifs(false));
     } else {
       setLoadingNotifs(false);
     }
@@ -244,6 +283,8 @@ export default function DashboardLayout() {
         await radiologyService.markAllNotificationsRead();
       } else if (roleKey === 'hospital_admin') {
         await hospitalAdminService.markAllNotificationsRead();
+      } else if (roleKey === 'super_admin') {
+        await superadminService.markAllNotificationsRead();
       }
     } catch (err) {
       console.warn('Backend markAllNotificationsRead error:', err);
@@ -270,6 +311,8 @@ export default function DashboardLayout() {
           await radiologyService.markNotificationRead(item.id);
         } else if (roleKey === 'hospital_admin') {
           await hospitalAdminService.markNotificationRead(item.id);
+        } else if (roleKey === 'super_admin') {
+          await superadminService.markNotificationRead(item.id);
         }
       } catch (err) {
         console.warn('Backend markNotificationRead error:', err);
@@ -278,6 +321,15 @@ export default function DashboardLayout() {
 
 
     setNotifDropdownOpen(false);
+
+    if (roleKey === 'super_admin') {
+      if (item.link) {
+        navigate(item.link);
+      } else {
+        navigate(`${currentRoleNav.basePath}?tab=notifications`);
+      }
+      return;
+    }
 
     // Optional navigation to the relevant tab
     const cat = (item.category || item.type || '').toLowerCase();
@@ -309,23 +361,6 @@ export default function DashboardLayout() {
       } else if (item.targetTab) {
         navigate(`${currentRoleNav.basePath}?tab=${item.targetTab}`);
       }
-    }
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    const domVal = e.target?.querySelector?.('.topbar__search-input')?.value;
-    const q = (typeof domVal === 'string' && domVal.length > 0 ? domVal : searchQuery).trim();
-    if (!q) return;
-
-    if (roleKey === 'pharmacist') {
-      if (q.toUpperCase().startsWith('RX') || q.toUpperCase().startsWith('PRE-')) {
-        navigate(`${currentRoleNav.basePath}?tab=prescriptions&q=${encodeURIComponent(q)}`);
-      } else {
-        navigate(`${currentRoleNav.basePath}?tab=medicines&q=${encodeURIComponent(q)}`);
-      }
-    } else if (roleKey === 'radiology_staff') {
-      navigate(`${currentRoleNav.basePath}?tab=requests&search=${encodeURIComponent(q)}`);
     }
   };
 
@@ -389,6 +424,24 @@ export default function DashboardLayout() {
           }
         })
         .catch(() => {});
+    } else if (roleKey === 'super_admin') {
+      superadminService.getUnreadNotificationCount()
+        .then((res) => {
+          if (isMounted) {
+            const count = res.data?.data?.unreadCount ?? res.data?.unreadCount ?? 0;
+            setUnreadCount(count);
+          }
+        })
+        .catch(() => {});
+    } else if (roleKey === 'hospital_admin') {
+      hospitalAdminService.getNotifications()
+        .then((res) => {
+          if (isMounted) {
+            const count = res.data?.data?.unreadCount ?? 0;
+            setUnreadCount(count);
+          }
+        })
+        .catch(() => {});
     }
     return () => { isMounted = false; };
   }, [roleKey, currentTab]);
@@ -398,6 +451,13 @@ export default function DashboardLayout() {
     const handleNotifUpdate = (e) => {
       if (typeof e.detail?.count === 'number') {
         setUnreadCount(e.detail.count);
+      } else if (roleKey === 'hospital_admin') {
+        hospitalAdminService.getNotifications()
+          .then((res) => {
+            const count = res.data?.data?.unreadCount ?? 0;
+            setUnreadCount(count);
+          })
+          .catch(() => {});
       } else if (roleKey === 'receptionist') {
         receptionService.getNotifications()
           .then((res) => {
@@ -438,6 +498,13 @@ export default function DashboardLayout() {
             setUnreadCount(count);
           })
           .catch(() => {});
+      } else if (roleKey === 'super_admin') {
+        superadminService.getUnreadNotificationCount()
+          .then((res) => {
+            const count = res.data?.data?.unreadCount ?? res.data?.unreadCount ?? 0;
+            setUnreadCount(count);
+          })
+          .catch(() => {});
       }
     };
     window.addEventListener('hms:notification-update', handleNotifUpdate);
@@ -452,10 +519,60 @@ export default function DashboardLayout() {
 
   const closeSidebar = () => setSidebarOpen(false);
 
+  const isInternalSettings = roleKey === 'super_admin';
+
   // Active navigation item details for breadcrumbs
-  const activeNavItem = location.pathname === '/dashboard/settings'
+  const activeNavItem = (location.pathname === '/dashboard/settings' && !isInternalSettings)
     ? { id: 'settings', label: 'Settings', icon: Settings }
-    : currentRoleNav.items.find((item) => item.id === currentTab) || currentRoleNav.items[0];
+    : currentRoleNav?.items?.find((item) => item.id === currentTab) || currentRoleNav?.items?.[0] || { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard };
+
+
+  const renderNavItem = (item) => {
+    const Icon = item.icon;
+
+    if (item.id === 'logout') {
+      return (
+        <button
+          key={item.id}
+          type="button"
+          className="sidebar__link sidebar__link--logout"
+          onClick={() => {
+            closeSidebar();
+            handleLogout();
+          }}
+          title="Sign out of your account"
+        >
+          <Icon size={18} className="sidebar__link-icon" />
+          <span className="sidebar__link-text">{item.label}</span>
+        </button>
+      );
+    }
+
+    const targetUrl = item.id === 'dashboard'
+      ? currentRoleNav.basePath
+      : (item.id === 'settings' && !isInternalSettings)
+        ? '/dashboard/settings'
+        : `${currentRoleNav.basePath}?tab=${item.id}`;
+    const isSettingsPath = location.pathname === '/dashboard/settings';
+    const isActive =
+      (isSettingsPath && item.id === 'settings') ||
+      (!isSettingsPath && location.pathname === currentRoleNav.basePath && currentTab === item.id);
+
+    return (
+      <Link
+        key={item.id}
+        to={targetUrl}
+        className={`sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+        onClick={closeSidebar}
+      >
+        <Icon size={18} className="sidebar__link-icon" />
+        <span className="sidebar__link-text">{item.label}</span>
+        {item.id === 'notifications' && unreadCount > 0 && (
+          <span className="sidebar__link-badge">{unreadCount}</span>
+        )}
+      </Link>
+    );
+  };
 
   return (
     <div className="dashboard-layout">
@@ -465,7 +582,7 @@ export default function DashboardLayout() {
       )}
 
       {/* Sidebar */}
-      <aside className={`dashboard-layout__sidebar ${sidebarOpen ? 'dashboard-layout__sidebar--open' : ''}`}>
+      <aside className={`dashboard-layout__sidebar ${roleKey === 'super_admin' ? 'dashboard-layout__sidebar--superadmin' : ''} ${sidebarOpen ? 'dashboard-layout__sidebar--open' : ''}`}>
         <div className="sidebar__header">
           <Link to={currentRoleNav.basePath} className="sidebar__brand" onClick={closeSidebar}>
             <div className="sidebar__brand-icon">
@@ -474,16 +591,19 @@ export default function DashboardLayout() {
             <div className="sidebar__brand-text-wrap">
               <span className="sidebar__brand-text">HMS</span>
               <span className="sidebar__brand-sub">
-                {roleKey === 'super_admin' ? 'SUPER ADMIN PORTAL' : (currentRoleNav.portalName || 'Patient Portal')}
+                {roleKey === 'super_admin' ? 'SUPER ADMIN PORTAL' :
+                  roleKey === 'hospital_admin' ? 'HOSPITAL ADMIN PORTAL' :
+                  (currentRoleNav.portalName || 'Patient Portal')}
               </span>
               <span className="sidebar__brand-badge">
                 {roleKey === 'super_admin' ? 'SUPER ADMIN' :
+                  roleKey === 'hospital_admin' ? 'HOSPITAL ADMIN' :
                   roleKey === 'nurse' ? 'NURSING CARE' :
                   roleKey === 'receptionist' ? 'RECEPTION' :
                   roleKey === 'pharmacist' ? 'PHARMACY' :
                   roleKey === 'doctor' ? 'DOCTOR' :
-                 roleKey === 'patient' ? 'PATIENT' :
-                 (user?.role || 'PORTAL').replace(/_/g, ' ').toUpperCase()}
+                  roleKey === 'patient' ? 'PATIENT' :
+                  (typeof user?.role === 'string' ? user.role : (user?.roleName || 'PORTAL')).replace(/_/g, ' ').toUpperCase()}
               </span>
             </div>
           </Link>
@@ -498,37 +618,26 @@ export default function DashboardLayout() {
 
         {/* Navigation List */}
         <nav className="sidebar__nav">
-          <div className="sidebar__section-title">
-            {roleKey === 'super_admin' ? 'Hospital Administration' : (currentRoleNav.portalName || 'Portal Navigation')}
-          </div>
-
-          {currentRoleNav.items.map((item) => {
-            const Icon = item.icon;
-            const targetUrl = item.id === 'dashboard'
-              ? currentRoleNav.basePath
-              : item.id === 'settings'
-                ? '/dashboard/settings'
-                : `${currentRoleNav.basePath}?tab=${item.id}`;
-            const isSettingsPath = location.pathname === '/dashboard/settings';
-            const isActive =
-              (isSettingsPath && item.id === 'settings') ||
-              (!isSettingsPath && location.pathname === currentRoleNav.basePath && currentTab === item.id);
-
-            return (
-              <Link
-                key={item.id}
-                to={targetUrl}
-                className={`sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
-                onClick={closeSidebar}
+          {currentRoleNav.sections ? (
+            currentRoleNav.sections.map((section, sIdx) => (
+              <div
+                key={section.title || sIdx}
+                className={`sidebar__section-group ${sIdx > 0 ? 'sidebar__section-group--bordered' : ''}`}
               >
-                <Icon size={18} className="sidebar__link-icon" />
-                <span className="sidebar__link-text">{item.label}</span>
-                {item.id === 'notifications' && unreadCount > 0 && (
-                  <span className="sidebar__link-badge">{unreadCount}</span>
-                )}
-              </Link>
-            );
-          })}
+                <div className="sidebar__section-title">
+                  {section.title}
+                </div>
+                {section.items.map((item) => renderNavItem(item))}
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="sidebar__section-title">
+                {roleKey === 'super_admin' ? 'Global Administration' : (currentRoleNav.portalName || 'Portal Navigation')}
+              </div>
+              {currentRoleNav.items.map((item) => renderNavItem(item))}
+            </>
+          )}
         </nav>
 
         {/* Sidebar Footer with Profile, HMS v1.0.0, and Logout */}
@@ -545,12 +654,13 @@ export default function DashboardLayout() {
               <span className="sidebar__user-email">{user?.email}</span>
               <span className="sidebar__user-role-badge">
                 {roleKey === 'super_admin' ? 'SUPER ADMIN' :
+                  roleKey === 'hospital_admin' ? 'HOSPITAL ADMIN' :
                   roleKey === 'nurse' ? 'NURSING STATION' :
                   roleKey === 'receptionist' ? 'RECEPTION DESK' :
                   roleKey === 'pharmacist' ? 'PHARMACY STAFF' :
                   roleKey === 'doctor' ? 'ATTENDING DOCTOR' :
-                 roleKey === 'patient' ? 'PATIENT' :
-                 (user?.role || 'USER').replace(/_/g, ' ').toUpperCase()}
+                  roleKey === 'patient' ? 'PATIENT' :
+                  (typeof user?.role === 'string' ? user.role : (user?.roleName || 'USER')).replace(/_/g, ' ').toUpperCase()}
               </span>
             </div>
           </div>
@@ -562,14 +672,16 @@ export default function DashboardLayout() {
             </span>
           </div>
 
-          <button
-            className="sidebar__logout-btn"
-            onClick={handleLogout}
-            title="Sign out of your account"
-          >
-            <LogOut size={15} />
-            <span>Logout</span>
-          </button>
+          {!['super_admin', 'hospital_admin'].includes(roleKey) && (
+            <button
+              className="sidebar__logout-btn"
+              onClick={handleLogout}
+              title="Sign out of your account"
+            >
+              <LogOut size={15} />
+              <span>Logout</span>
+            </button>
+          )}
         </div>
       </aside>
 
@@ -597,44 +709,15 @@ export default function DashboardLayout() {
               </span>
             ) : (
               <span className="topbar__breadcrumb-current" style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
-                {activeNavItem.label}
+                {activeNavItem?.label || 'Dashboard'}
               </span>
             )}
           </div>
 
           <div className="topbar__spacer" />
 
-          {/* Topbar Right Controls: [Search] [Theme Toggle] [Notification Bell] */}
+          {/* Topbar Right Controls: [Theme Toggle] [Notification Bell] */}
           <div className="topbar__actions">
-            {/* Search Input */}
-            <form className="topbar__search-form" onSubmit={handleSearchSubmit}>
-              <div className="topbar__search-wrap">
-                <Search size={15} className="topbar__search-icon" />
-                <input
-                  type="text"
-                  className="topbar__search-input"
-                  placeholder={
-                    roleKey === 'pharmacist'
-                      ? 'Search medicines, prescriptions...'
-                      : 'Search portal records...'
-                  }
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Search"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    className="topbar__search-clear"
-                    onClick={() => setSearchQuery('')}
-                    aria-label="Clear search"
-                  >
-                    <X size={13} />
-                  </button>
-                )}
-              </div>
-            </form>
-
             {/* Quick Theme Toggle (Light <-> Dark) */}
             <button
               type="button"

@@ -137,7 +137,7 @@ export default function RadiologyPatientsTab({ activePatient, onNavigateTab }) {
           ) : patients.length === 0 ? (
             <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
               <Users size={36} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-              <p style={{ fontWeight: 600, color: '#475569' }}>No patients found.</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No patients found.</p>
               <p style={{ fontSize: '0.85rem' }}>Try adjusting your search criteria.</p>
             </div>
           ) : (
@@ -157,7 +157,7 @@ export default function RadiologyPatientsTab({ activePatient, onNavigateTab }) {
                 {patients.map((p) => (
                   <tr key={p._id || p.id}>
                     <td>
-                      <strong style={{ fontSize: '0.92rem', color: '#0f172a' }}>
+                      <strong style={{ fontSize: '0.92rem', color: 'var(--text-primary)' }}>
                         {p.fullName || p.name || 'Patient'}
                       </strong>
                     </td>

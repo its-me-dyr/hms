@@ -8,7 +8,7 @@
  * - Forwarding to clinical verification workstation
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   FileText,
   CheckCircle2,
@@ -41,7 +41,7 @@ export default function ResultsEntryTab({ activeTest, onNavigateTab }) {
     setHasCriticalFlag(critical);
   };
 
-  const loadTestForEntry = (test, catalogList = catalogTests) => {
+  const loadTestForEntry = useCallback((test, catalogList = catalogTests) => {
     setSelectedTest(test);
     setTechnicianNotes(test.technicianNotes || '');
 
@@ -84,15 +84,15 @@ export default function ResultsEntryTab({ activeTest, onNavigateTab }) {
       ]);
     }
     setHasCriticalFlag(false);
-  };
+  }, [catalogTests]);
 
   useEffect(() => {
     if (activeTest) {
       loadTestForEntry(activeTest);
     }
-  }, [activeTest]);
+  }, [activeTest, loadTestForEntry]);
 
-  const fetchPendingResults = () => {
+  const fetchPendingResults = useCallback(() => {
     setLoading(true);
     Promise.all([
       labService.getResultsPending(),
@@ -100,11 +100,16 @@ export default function ResultsEntryTab({ activeTest, onNavigateTab }) {
     ])
       .then(([resPending, resCatalog]) => {
         const tests = resPending.data || [];
+        const catalog = resCatalog.data || [];
         setPendingTests(tests);
-        setCatalogTests(resCatalog.data || []);
-        if (!selectedTest && tests.length > 0) {
-          loadTestForEntry(tests[0], resCatalog.data || []);
-        }
+        setCatalogTests(catalog);
+        setSelectedTest((current) => {
+          if (!current && tests.length > 0) {
+            loadTestForEntry(tests[0], catalog);
+            return tests[0];
+          }
+          return current;
+        });
       })
       .catch((err) => {
         console.error('Failed to load pending results:', err);
@@ -113,11 +118,11 @@ export default function ResultsEntryTab({ activeTest, onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [loadTestForEntry]);
 
   useEffect(() => {
     fetchPendingResults();
-  }, []);
+  }, [fetchPendingResults]);
 
 
   const handleParamChange = (index, field, val) => {

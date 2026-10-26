@@ -33,6 +33,7 @@ import {
   Settings,
   ShieldCheck,
   CheckCircle2,
+  LogOut,
 } from 'lucide-react';
 
 export const ROLE_NAVIGATION = {
@@ -40,21 +41,39 @@ export const ROLE_NAVIGATION = {
     portalName: 'Super Admin Portal',
     badgeColor: '#0891b2',
     basePath: '/dashboard/super-admin',
+    sections: [
+      {
+        title: 'MAIN',
+        items: [
+          { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+          { id: 'hospitals', label: 'Hospital Management', icon: Building2 },
+          { id: 'hospital-admins', label: 'Hospital Admin Management', icon: Users },
+          { id: 'roles', label: 'Roles & Permissions', icon: ShieldCheck },
+          { id: 'reports', label: 'Reports & Analytics', icon: FileText },
+          { id: 'audit-logs', label: 'Audit Logs', icon: History },
+          { id: 'notifications', label: 'Notifications', icon: Bell },
+        ],
+      },
+      {
+        title: 'ACCOUNT',
+        items: [
+          { id: 'profile', label: 'My Profile', icon: User },
+          { id: 'settings', label: 'Settings', icon: Settings },
+          { id: 'logout', label: 'Logout', icon: LogOut },
+        ],
+      },
+    ],
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { id: 'users', label: 'Users & Staff', icon: Users },
-      { id: 'doctors', label: 'Doctors', icon: Stethoscope },
-      { id: 'nurses', label: 'Nurses', icon: Activity },
-      { id: 'departments', label: 'Departments', icon: Building2 },
+      { id: 'hospitals', label: 'Hospital Management', icon: Building2 },
+      { id: 'hospital-admins', label: 'Hospital Admin Management', icon: Users },
       { id: 'roles', label: 'Roles & Permissions', icon: ShieldCheck },
-      { id: 'patients', label: 'Patients', icon: Users },
-      { id: 'appointments', label: 'Appointments', icon: Calendar },
-      { id: 'billing', label: 'Billing', icon: CreditCard },
       { id: 'reports', label: 'Reports & Analytics', icon: FileText },
-      { id: 'notifications', label: 'Notifications', icon: Bell },
       { id: 'audit-logs', label: 'Audit Logs', icon: History },
-      { id: 'settings', label: 'Hospital Settings', icon: Settings },
+      { id: 'notifications', label: 'Notifications', icon: Bell },
       { id: 'profile', label: 'My Profile', icon: User },
+      { id: 'settings', label: 'Settings', icon: Settings },
+      { id: 'logout', label: 'Logout', icon: LogOut },
     ],
   },
 
@@ -140,16 +159,46 @@ export const ROLE_NAVIGATION = {
   },
 
   hospital_admin: {
-    portalName: 'Hospital Administration Console',
+    portalName: 'Hospital Admin Portal',
     badgeColor: '#0891b2',
     basePath: '/dashboard/hospital-admin',
+    sections: [
+      {
+        title: 'MAIN',
+        items: [
+          { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+          { id: 'hospital-settings', label: 'Hospital & Branch Settings', icon: Building2 },
+          { id: 'departments', label: 'Departments', icon: Building2 },
+          { id: 'services-charges', label: 'Services & Charges', icon: CreditCard },
+          { id: 'users', label: 'Users & Staff', icon: Users },
+          { id: 'operating-hours', label: 'Operating Hours & Holidays', icon: Clock },
+          { id: 'branding', label: 'Hospital Branding', icon: Layers },
+          { id: 'system-config', label: 'System Configuration', icon: Settings },
+          { id: 'reports', label: 'Administrative Reports', icon: FileText },
+        ],
+      },
+      {
+        title: 'SYSTEM',
+        items: [
+          { id: 'notifications', label: 'Notifications', icon: Bell },
+          { id: 'audit-logs', label: 'Audit Logs', icon: History },
+        ],
+      },
+      {
+        title: 'ACCOUNT',
+        items: [
+          { id: 'profile', label: 'My Profile', icon: User },
+          { id: 'settings', label: 'Settings', icon: Settings },
+          { id: 'logout', label: 'Logout', icon: LogOut },
+        ],
+      },
+    ],
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
       { id: 'hospital-settings', label: 'Hospital & Branch Settings', icon: Building2 },
       { id: 'departments', label: 'Departments', icon: Building2 },
       { id: 'services-charges', label: 'Services & Charges', icon: CreditCard },
       { id: 'users', label: 'Users & Staff', icon: Users },
-      { id: 'roles', label: 'Roles & Permissions', icon: ShieldCheck },
       { id: 'operating-hours', label: 'Operating Hours & Holidays', icon: Clock },
       { id: 'branding', label: 'Hospital Branding', icon: Layers },
       { id: 'system-config', label: 'System Configuration', icon: Settings },
@@ -158,6 +207,7 @@ export const ROLE_NAVIGATION = {
       { id: 'audit-logs', label: 'Audit Logs', icon: History },
       { id: 'profile', label: 'My Profile', icon: User },
       { id: 'settings', label: 'Settings', icon: Settings },
+      { id: 'logout', label: 'Logout', icon: LogOut },
     ],
   },
 
@@ -334,7 +384,10 @@ export const ROLE_NAVIGATION = {
  * Maps raw role string to normalized role key
  */
 export function normalizeRoleKey(role) {
-  const r = String(role || '').toLowerCase().trim().replace(/[-\s]/g, '_');
+  const raw = typeof role === 'object' && role !== null
+    ? (role.name || role.roleName || role.displayName || '')
+    : role;
+  const r = String(raw || '').toLowerCase().trim().replace(/[-\s]/g, '_');
   if (r === 'super_admin') return 'super_admin';
   if (r === 'hospital_admin') return 'hospital_admin';
   if (r === 'doctor') return 'doctor';

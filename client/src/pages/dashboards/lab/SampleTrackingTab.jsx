@@ -7,7 +7,7 @@
  * - Chain-of-custody tracking with responsible technicians
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Activity,
   Barcode,
@@ -22,14 +22,15 @@ export default function SampleTrackingTab({ onNavigateTab }) {
   const [samples, setSamples] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [stageFilter, setStageFilter] = useState('all');
   const [selectedSample, setSelectedSample] = useState(null);
 
-  const fetchSamples = () => {
+  const fetchSamples = useCallback(() => {
     setLoading(true);
     labService.getSamples({
       stage: stageFilter !== 'all' ? stageFilter : undefined,
-      search: search || undefined,
+      search: activeSearch || undefined,
     })
       .then((res) => {
         setSamples(res.data || []);
@@ -40,15 +41,15 @@ export default function SampleTrackingTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [activeSearch, stageFilter]);
 
   useEffect(() => {
     fetchSamples();
-  }, [stageFilter]);
+  }, [fetchSamples]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchSamples();
+    setActiveSearch(search);
   };
 
   return (

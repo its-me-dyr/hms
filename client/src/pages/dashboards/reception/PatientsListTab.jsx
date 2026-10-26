@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { receptionService } from '../../../services/reception.service';
 
-export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpenBookAppointment }) {
+export default function PatientsListTab({ onNavigateTab, _onSelectPatient, onOpenBookAppointment }) {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -250,7 +250,7 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
         ) : patients.length === 0 ? (
           <div style={{ padding: '3.5rem 1.5rem', textAlign: 'center' }}>
             <Users size={36} style={{ color: '#cbd5e1', margin: '0 auto 0.75rem' }} />
-            <h3 style={{ margin: '0 0 0.4rem', color: '#0f172a', fontSize: '1.05rem' }}>No patients found</h3>
+            <h3 style={{ margin: '0 0 0.4rem', color: 'var(--text-primary)', fontSize: '1.05rem' }}>No patients found</h3>
             <p style={{ margin: '0 0 1rem', color: '#64748b', fontSize: '0.85rem' }}>
               {search ? 'Try adjusting your search criteria or filters.' : 'No registered patients in the database yet.'}
             </p>
@@ -292,7 +292,7 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
                       </span>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#0f172a' }}>{p.name}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{p.name}</div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{p.email}</div>
                     </td>
                     <td>
@@ -300,7 +300,7 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
                       <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{p.gender}</div>
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.82rem', color: '#0f172a' }}>{p.phone}</span>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--text-primary)' }}>{p.phone}</span>
                     </td>
                     <td>
                       <span
@@ -426,7 +426,7 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
                   {patientDetail?.firstName?.[0] || 'P'}
                 </div>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#0f172a' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                     {patientDetail?.name || 'Patient Profile'}
                   </h3>
                   <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
@@ -453,7 +453,7 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
                     display: 'grid',
                     gridTemplateColumns: 'repeat(3, 1fr)',
                     gap: '0.75rem',
-                    background: '#f8fafc',
+                    background: 'var(--bg-surface)',
                     border: '1px solid var(--border-color)',
                     borderRadius: '10px',
                     padding: '0.85rem',
@@ -462,15 +462,15 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
                 >
                   <div>
                     <span style={{ color: '#64748b', display: 'block', fontSize: '0.72rem' }}>PHONE NUMBER</span>
-                    <strong style={{ color: '#0f172a' }}>{patientDetail.phone}</strong>
+                    <strong style={{ color: 'var(--text-primary)' }}>{patientDetail.phone}</strong>
                   </div>
                   <div>
                     <span style={{ color: '#64748b', display: 'block', fontSize: '0.72rem' }}>EMAIL ADDRESS</span>
-                    <strong style={{ color: '#0f172a' }}>{patientDetail.email}</strong>
+                    <strong style={{ color: 'var(--text-primary)' }}>{patientDetail.email}</strong>
                   </div>
                   <div>
                     <span style={{ color: '#64748b', display: 'block', fontSize: '0.72rem' }}>GENDER & AGE</span>
-                    <strong style={{ color: '#0f172a' }}>{patientDetail.gender} ({patientDetail.age})</strong>
+                    <strong style={{ color: 'var(--text-primary)' }}>{patientDetail.gender} ({patientDetail.age})</strong>
                   </div>
                   <div>
                     <span style={{ color: '#64748b', display: 'block', fontSize: '0.72rem' }}>BLOOD GROUP</span>
@@ -478,7 +478,7 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
                   </div>
                   <div>
                     <span style={{ color: '#64748b', display: 'block', fontSize: '0.72rem' }}>LOCATION</span>
-                    <strong style={{ color: '#0f172a' }}>{patientDetail.address?.city || 'Springfield'}, {patientDetail.address?.state || 'IL'}</strong>
+                    <strong style={{ color: 'var(--text-primary)' }}>{patientDetail.address?.city || 'Springfield'}, {patientDetail.address?.state || 'IL'}</strong>
                   </div>
                   <div>
                     <span style={{ color: '#64748b', display: 'block', fontSize: '0.72rem' }}>ACCOUNT STATUS</span>
@@ -510,7 +510,7 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
 
                 {/* Appointments History */}
                 <div>
-                  <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>
+                  <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                     Recent Consultations & Appointments
                   </h4>
                   {patientDetail.appointments?.length === 0 ? (
@@ -525,7 +525,7 @@ export default function PatientsListTab({ onNavigateTab, onSelectPatient, onOpen
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             padding: '0.5rem 0.75rem',
-                            background: '#f8fafc',
+                            background: 'var(--bg-surface)',
                             border: '1px solid var(--border-color)',
                             borderRadius: '6px',
                             fontSize: '0.78rem',

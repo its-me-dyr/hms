@@ -8,7 +8,7 @@
  * - Detailed inspection drawer with patient demographics and billing status
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   ClipboardList,
   Search,
@@ -32,6 +32,7 @@ export default function LabRequestsTab({ onNavigateTab }) {
 
   // Filters
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [priorityFilter, setPriorityFilter] = useState('ALL');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
@@ -42,10 +43,10 @@ export default function LabRequestsTab({ onNavigateTab }) {
   const [rejectionReason, setRejectionReason] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
 
-  const fetchRequests = () => {
+  const fetchRequests = useCallback(() => {
     setLoading(true);
     labService.getRequests({
-      search: search || undefined,
+      search: activeSearch || undefined,
       status: statusFilter !== 'ALL' ? statusFilter : undefined,
       priority: priorityFilter !== 'ALL' ? priorityFilter : undefined,
       category: categoryFilter !== 'ALL' ? categoryFilter : undefined,
@@ -63,15 +64,15 @@ export default function LabRequestsTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [activeSearch, statusFilter, priorityFilter, categoryFilter]);
 
   useEffect(() => {
     fetchRequests();
-  }, [statusFilter, priorityFilter, categoryFilter]);
+  }, [fetchRequests]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchRequests();
+    setActiveSearch(search);
   };
 
   const handleStatusTransition = async (reqId, newStatus, reason = '') => {

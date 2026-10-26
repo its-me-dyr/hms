@@ -8,7 +8,7 @@
  * - Dispatches 'hms:notification-update' for instantaneous sidebar badge synchronization
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Bell,
   Pill,
@@ -23,13 +23,13 @@ import {
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
-export default function NotificationsTab({ onNavigateTab }) {
+export default function NotificationsTab({ onNavigateTab: _onNavigateTab }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  const loadNotifications = () => {
+  const loadNotifications = useCallback(() => {
     setLoading(true);
     setError('');
     pharmacyService.getNotifications()
@@ -56,11 +56,11 @@ export default function NotificationsTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     loadNotifications();
-  }, []);
+  }, [loadNotifications]);
 
   const markAllAsRead = async () => {
     const updated = notifications.map((n) => ({ ...n, read: true, isRead: true }));

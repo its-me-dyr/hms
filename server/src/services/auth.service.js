@@ -9,14 +9,11 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const Role = require('../models/Role');
-const Otp = require('../models/OtpVerification');
 const AuditLog = require('../models/AuditLog');
 const StaffVerification = require('../models/StaffVerification');
 const ApiError = require('../utils/ApiError');
 const logger = require('../utils/logger');
 const env = require('../config/env');
-const emailService = require('./emailService');
 
 const ROLE_DISPLAY_MAP = {
   patient: { name: 'PATIENT', displayName: 'Patient Portal Account', permissions: ['patients:read', 'appointments:read', 'appointments:create'] },
@@ -309,326 +306,15 @@ class AuthService {
         permissions,
         status: user.status || 'active',
         profileImage: user.profileImage,
+        hospital: user.hospital || null,
+        hospitalId: user.hospital || user.hospitalId || null,
+        hospitalBranch: user.hospitalBranch || user.branchCode || 'MAIN-01',
         lastLogin: user.lastLogin,
+        mustChangePassword: Boolean(user.mustChangePassword),
       },
       accessToken,
       refreshToken,
     };
-  }
-
-  /**
-   * Request Registration OTP (Step 1)
-   * Validates input, hashes password and OTP, stores in Otp collection, dispatches email
-   */
-  async requestRegistrationOtp(data, ipAddress = '', userAgent = '') {
-    const email = data.email.toLowerCase().trim();
-    const normalizedRole = String(data.role || 'patient').toLowerCase().trim();
-
-    // 1. Strictly forbid privileged roles from self-registration
-    if (['super_admin', 'hospital_admin'].includes(normalizedRole)) {
-      throw new ApiError(400, 'Self-registration for privileged administrative roles is strictly prohibited.');
-    }
-
-    // 2. Check if an active account with this email already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      throw new ApiError(409, 'An account with this email address already exists.');
-    }
-
-    // 3. Generate cryptographically secure 6-digit OTP
-    const otp = crypto.randomInt(100000, 999999).toString();
-    const salt = await bcrypt.genSalt(10);
-    const otpHash = await bcrypt.hash(otp, salt);
-    const passwordHash = await bcrypt.hash(data.password, salt);
-
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes TTL
-
-    // 4. Upsert pending registration in Otp collection
-    await Otp.deleteMany({ email });
-
-    await Otp.create({
-      email,
-      otpHash,
-      registrationData: {
-        firstName: data.firstName.trim(),
-        lastName: data.lastName.trim(),
-        phone: data.phone ? data.phone.trim() : '',
-        dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
-        gender: data.gender || 'prefer_not_to_say',
-        role: normalizedRole,
-        passwordHash,
-        department: data.department || '',
-        qualification: data.qualification || '',
-        institution: data.institution || '',
-        yearsOfExperience: data.yearsOfExperience || 0,
-        previousOrganization: data.previousOrganization || '',
-        employeeId: data.employeeId || '',
-        licenseNumber: data.licenseNumber || '',
-        specialization: data.specialization || '',
-        professionalDescription: data.professionalDescription || '',
-        documents: Array.isArray(data.documents) ? data.documents : [],
-        address: data.address || {},
-        emergencyContact: data.emergencyContact || {},
-      },
-      attempts: 0,
-      verified: false,
-      expiresAt,
-      purgeAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour session retention
-    });
-
-    // 5. Send OTP via email
-    try {
-      await emailService.sendRegistrationOTP(email, otp, data.firstName.trim());
-    } catch (err) {
-      // Invalidate the unverified OTP record if email dispatch fails
-      await Otp.deleteMany({ email });
-      throw new ApiError(500, 'Unable to send verification email. Please try again.');
-    }
-
-    return {
-      success: true,
-      message: 'Verification code sent to your email.',
-    };
-  }
-
-  /**
-   * Verify Registration OTP (Step 2)
-   * Verifies OTP, persists User, assigns status ('active' for patient, 'pending' for staff)
-   */
-  async verifyRegistrationOtp(email, otp, ipAddress = '', userAgent = '') {
-    const normalizedEmail = (email || '').toLowerCase().trim();
-    const trimmedOtp = String(otp || '').trim();
-
-    // 1. Find OTP record and verify expiration
-    const otpRecord = await Otp.findOne({
-      email: normalizedEmail,
-      verified: false,
-    });
-
-    if (!otpRecord || new Date() > otpRecord.expiresAt) {
-      throw new ApiError(400, 'Verification code has expired. Please request a new code.');
-    }
-
-    // 2. Rate limit attempt count (max 5)
-    if (otpRecord.attempts >= 5) {
-      await Otp.deleteMany({ email: normalizedEmail });
-      throw new ApiError(400, 'Too many incorrect attempts. Please request a new verification code.');
-    }
-
-    // 3. Compare OTP hash
-    const isValidOtp = await bcrypt.compare(trimmedOtp, otpRecord.otpHash);
-    if (!isValidOtp) {
-      otpRecord.attempts += 1;
-      if (otpRecord.attempts >= 5) {
-        await Otp.deleteMany({ email: normalizedEmail });
-        throw new ApiError(400, 'Too many incorrect attempts. Please request a new verification code.');
-      }
-      await otpRecord.save();
-      throw new ApiError(400, 'Invalid verification code. Please check and try again.');
-    }
-
-    // 4. Double check duplicate user creation race condition
-    const existingUser = await User.findOne({ email: normalizedEmail });
-    if (existingUser) {
-      await Otp.deleteMany({ email: normalizedEmail });
-      throw new ApiError(409, 'An account with this email address already exists.');
-    }
-
-    // 5. Provision or resolve Role
-    const reg = otpRecord.registrationData;
-    const roleMeta = ROLE_DISPLAY_MAP[reg.role] || {
-      name: reg.role.toUpperCase(),
-      displayName: reg.role.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-      permissions: ['patients:read'],
-    };
-
-    let roleDoc = await Role.findOne({ name: roleMeta.name });
-    if (!roleDoc) {
-      roleDoc = await Role.create({
-        name: roleMeta.name,
-        displayName: roleMeta.displayName,
-        description: `${roleMeta.displayName} account in HMS.`,
-        permissions: roleMeta.permissions,
-        isSystemRole: true,
-        isActive: true,
-      });
-    }
-
-    // 6. Role status assignment: Patient -> 'active', Staff roles -> 'pending_verification'
-    const isPatient = reg.role === 'patient';
-    const status = isPatient ? 'active' : 'pending_verification';
-
-    const user = new User({
-      firstName: reg.firstName,
-      lastName: reg.lastName,
-      email: normalizedEmail,
-      phone: reg.phone,
-      dateOfBirth: reg.dateOfBirth,
-      gender: reg.gender,
-      password: reg.passwordHash,
-      role: roleDoc._id,
-      roleName: roleMeta.name,
-      address: reg.address || {},
-      emergencyContact: reg.emergencyContact || {},
-      department: reg.department || '',
-      qualification: reg.qualification || '',
-      institution: reg.institution || '',
-      yearsOfExperience: Number(reg.yearsOfExperience) || 0,
-      previousOrganization: reg.previousOrganization || '',
-      licenseNumber: reg.licenseNumber || '',
-      specialization: reg.specialization || '',
-      status,
-      isActive: isPatient,
-      isEmailVerified: true,
-    });
-
-    await user.save();
-
-    let verificationDoc = null;
-
-    // If staff role, create linked StaffVerification application
-    if (!isPatient) {
-      verificationDoc = await StaffVerification.create({
-        applicant: user._id,
-        applicantName: `${user.firstName} ${user.lastName}`.trim(),
-        applicantEmail: user.email,
-        role: reg.role,
-        department: reg.department || 'General',
-        personalInfo: {
-          phone: reg.phone || '',
-          dateOfBirth: reg.dateOfBirth || null,
-          gender: reg.gender || 'prefer_not_to_say',
-          address: reg.address || {},
-          emergencyContact: reg.emergencyContact || {},
-        },
-        professionalInfo: {
-          qualification: reg.qualification || '',
-          institution: reg.institution || '',
-          yearsOfExperience: Number(reg.yearsOfExperience) || 0,
-          previousOrganization: reg.previousOrganization || '',
-          employeeId: reg.employeeId || '',
-          licenseNumber: reg.licenseNumber || '',
-          specialization: reg.specialization || '',
-          professionalDescription: reg.professionalDescription || '',
-        },
-        documents: Array.isArray(reg.documents) ? reg.documents : [],
-        status: 'PENDING_VERIFICATION',
-        submittedAt: new Date(),
-        verificationHistory: [
-          {
-            action: 'SUBMITTED',
-            newStatus: 'PENDING_VERIFICATION',
-            performedBy: 'Applicant',
-            reason: 'Initial staff registration application submitted',
-            timestamp: new Date(),
-          },
-        ],
-      });
-
-      // Dispatch pending verification email asynchronously
-      try {
-        await emailService.sendStaffPendingEmail(user.email, user.firstName, reg.role);
-      } catch (err) {
-        logger.warn(`Could not dispatch staff pending email: ${err.message}`);
-      }
-    }
-
-    // 7. Remove OTP record
-    await Otp.deleteMany({ email: normalizedEmail });
-
-    // 8. Audit log registration
-    await AuditLog.create({
-      user: user._id,
-      userEmail: user.email,
-      userRole: roleMeta.name,
-      action: isPatient ? 'REGISTER_PATIENT' : 'STAFF_REGISTER_SUBMITTED',
-      module: 'auth',
-      ipAddress,
-      userAgent,
-      status: 'SUCCESS',
-      details: { role: reg.role, status },
-    });
-
-    logger.info(`User registered successfully: ${user.email} [Role: ${reg.role}, Status: ${status}]`);
-
-    return {
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        fullName: user.fullName,
-        email: user.email,
-        role: reg.role,
-        status,
-        createdAt: user.createdAt,
-      },
-      application: verificationDoc ? {
-        id: verificationDoc._id.toString(),
-        applicantName: verificationDoc.applicantName,
-        applicantEmail: verificationDoc.applicantEmail,
-        role: verificationDoc.role,
-        department: verificationDoc.department,
-        status: verificationDoc.status,
-        submittedAt: verificationDoc.submittedAt,
-        documentsCount: Array.isArray(verificationDoc.documents) ? verificationDoc.documents.length : 0,
-      } : null,
-      status,
-      message: isPatient
-        ? 'Registration completed successfully. You can now log in.'
-        : 'Account registered successfully. Your verification request has been submitted to the Super Administrator for review.',
-    };
-  }
-
-  /**
-   * Resend Registration OTP
-   */
-  async resendRegistrationOtp(email) {
-    const normalizedEmail = (email || '').toLowerCase().trim();
-    const otpRecord = await Otp.findOne({ email: normalizedEmail, verified: false }).sort({ createdAt: -1 });
-
-    if (!otpRecord) {
-      throw new ApiError(404, 'No pending registration found for this email address. Please register again.');
-    }
-
-    // 60-second cooldown check
-    const cooldownMs = 60 * 1000;
-    const timeSinceLastUpdate = Date.now() - new Date(otpRecord.updatedAt).getTime();
-    if (timeSinceLastUpdate < cooldownMs) {
-      const remainingSecs = Math.ceil((cooldownMs - timeSinceLastUpdate) / 1000);
-      throw new ApiError(429, `Please wait ${remainingSecs} seconds before requesting another verification code.`);
-    }
-
-    // Purge any orphan/duplicate active OTP records for this email
-    await Otp.deleteMany({ email: normalizedEmail, _id: { $ne: otpRecord._id } });
-
-    // Generate new secure OTP
-    const otp = crypto.randomInt(100000, 999999).toString();
-    const salt = await bcrypt.genSalt(10);
-    otpRecord.otpHash = await bcrypt.hash(otp, salt);
-    otpRecord.expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes TTL
-    otpRecord.purgeAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour session retention
-    otpRecord.attempts = 0;
-    await otpRecord.save();
-
-    const firstName = (otpRecord.registrationData && otpRecord.registrationData.firstName) || 'User';
-
-    try {
-      await emailService.sendRegistrationOTP(normalizedEmail, otp, firstName);
-    } catch (err) {
-      throw new ApiError(500, 'Unable to send verification email. Please try again.');
-    }
-
-    return {
-      success: true,
-      message: 'A new verification code has been sent to your email.',
-    };
-  }
-
-  /**
-   * Legacy registerPatient endpoint for backward compatibility
-   */
-  async registerPatient(data, ipAddress = '', userAgent = '') {
-    return this.requestRegistrationOtp({ ...data, role: 'patient' }, ipAddress, userAgent);
   }
 
   /**
@@ -843,6 +529,7 @@ class AuthService {
       profileImage: user.profileImage,
       lastLogin: user.lastLogin,
       createdAt: user.createdAt,
+      mustChangePassword: Boolean(user.mustChangePassword),
       preferences: user.preferences || {
         theme: 'system',
         language: 'en',
@@ -971,12 +658,6 @@ class AuthService {
       details: { role: verification.role, previousStatus, newStatus: 'PENDING_VERIFICATION' },
     });
 
-    try {
-      await emailService.sendStaffPendingEmail(user.email, user.firstName, verification.role);
-    } catch (e) {
-      logger.warn(`Could not dispatch staff pending email on resubmit: ${e.message}`);
-    }
-
     logger.info(`Staff application resubmitted by ${user.email} (Status: PENDING_VERIFICATION)`);
 
     return {
@@ -1043,6 +724,7 @@ class AuthService {
       status: user.status || 'active',
       profileImage: user.profileImage,
       lastLogin: user.lastLogin,
+      mustChangePassword: Boolean(user.mustChangePassword),
       preferences: user.preferences || {
         theme: 'system',
         language: 'en',
@@ -1074,21 +756,49 @@ class AuthService {
 
     // If Super Admin session
     if (userId === 'super_admin_system') {
-      const isSuperMatch =
-        (env.superAdminPasswordHash && (await bcrypt.compare(currentPassword, env.superAdminPasswordHash))) ||
-        currentPassword === 'Shini@2026' ||
-        currentPassword === 'Shini@123' ||
-        currentPassword === 'SuperAdmin@2026!';
+      const email = env.superAdminEmail || 'devadharshinichitturi95@gmail.com';
+      const saUser = await User.findOne({ email }).select('+password');
+
+      let isSuperMatch = false;
+      if (saUser && saUser.password) {
+        try {
+          isSuperMatch = await bcrypt.compare(currentPassword, saUser.password);
+        } catch (e) {
+          isSuperMatch = false;
+        }
+      }
+
+      if (!isSuperMatch && env.superAdminPasswordHash && env.superAdminPasswordHash.startsWith('$2')) {
+        try {
+          isSuperMatch = await bcrypt.compare(currentPassword, env.superAdminPasswordHash);
+        } catch (e) {
+          isSuperMatch = false;
+        }
+      }
+
+      if (!isSuperMatch && (currentPassword === 'Shini@2026' || currentPassword === 'Shini@123' || currentPassword === 'SuperAdmin@2026!')) {
+        isSuperMatch = true;
+      }
 
       if (!isSuperMatch) {
         throw new ApiError(400, 'Current password is incorrect.');
       }
 
+      if (currentPassword === newPassword) {
+        throw new ApiError(400, 'New password cannot be identical to current password.');
+      }
+
       const salt = await bcrypt.genSalt(10);
-      env.superAdminPasswordHash = await bcrypt.hash(newPassword, salt);
+      const newHash = await bcrypt.hash(newPassword, salt);
+      env.superAdminPasswordHash = newHash;
+
+      if (saUser) {
+        saUser.password = newHash;
+        await saUser.save({ validateBeforeSave: false });
+      }
 
       await AuditLog.create({
-        userEmail: env.superAdminEmail,
+        userEmail: email,
         userRole: 'SUPER_ADMIN',
         action: 'PASSWORD_CHANGED',
         module: 'auth',
@@ -1111,8 +821,23 @@ class AuthService {
       throw new ApiError(400, 'Current password is incorrect.');
     }
 
+    if (currentPassword === newPassword) {
+      throw new ApiError(400, 'New password cannot be identical to current password.');
+    }
+
     user.password = newPassword;
+    user.mustChangePassword = false;
+    user.refreshTokens = [];
     await user.save();
+
+    await user.populate('role');
+    const permissions = user.role ? (user.role.permissions || []) : [];
+    const accessToken = user.generateAccessToken(permissions);
+    const refreshToken = user.generateRefreshToken();
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+    user.refreshTokens.push({ token: refreshToken, expiresAt });
+    await user.save({ validateBeforeSave: false });
 
     await AuditLog.create({
       user: user._id,
@@ -1123,10 +848,25 @@ class AuthService {
       ipAddress,
       userAgent,
       status: 'SUCCESS',
-      details: { description: 'User password updated successfully.' },
+      details: { description: 'User password updated successfully. mustChangePassword cleared.' },
     });
 
-    return { message: 'Password changed successfully.' };
+    return {
+      message: 'Password changed successfully.',
+      mustChangePassword: false,
+      accessToken,
+      refreshToken,
+      user: {
+        id: user._id,
+        _id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: (user.roleName || (user.role && user.role.name) || 'patient').toLowerCase(),
+        roleName: user.roleName || user.role?.name,
+        mustChangePassword: false,
+      },
+    };
   }
 
   /**
@@ -1134,18 +874,31 @@ class AuthService {
    */
   async getUserPreferences(userId) {
     if (userId === 'super_admin_system') {
+      const email = env.superAdminEmail || 'devadharshinichitturi95@gmail.com';
+      const saUser = await User.findOne({ email });
+      if (saUser && saUser.preferences) {
+        return {
+          theme: saUser.preferences.theme || 'system',
+          language: saUser.preferences.language || 'en',
+          timezone: saUser.preferences.timezone || 'UTC',
+          dateFormat: saUser.preferences.dateFormat || 'DD/MM/YYYY',
+          timeFormat: saUser.preferences.timeFormat || '12h',
+          dashboardPreference: saUser.preferences.dashboardPreference || 'default',
+          notifications: {
+            system: saUser.preferences.notifications?.system ?? true,
+            operational: saUser.preferences.notifications?.operational ?? true,
+          },
+        };
+      }
       return {
         theme: 'system',
         language: 'en',
+        timezone: 'UTC',
         dateFormat: 'DD/MM/YYYY',
         timeFormat: '12h',
         dashboardPreference: 'default',
         notifications: {
-          email: true,
-          appointments: true,
           system: true,
-          billing: true,
-          reminders: true,
           operational: true,
         },
       };
@@ -1159,15 +912,12 @@ class AuthService {
     return user.preferences || {
       theme: 'system',
       language: 'en',
+      timezone: 'UTC',
       dateFormat: 'DD/MM/YYYY',
       timeFormat: '12h',
       dashboardPreference: 'default',
       notifications: {
-        email: true,
-        appointments: true,
         system: true,
-        billing: true,
-        reminders: true,
         operational: true,
       },
     };
@@ -1176,11 +926,63 @@ class AuthService {
   /**
    * Update user preferences
    */
-  async updateUserPreferences(userId, updates, ipAddress = '', userAgent = '') {
+  async updateUserPreferences(userId, updates = {}, ipAddress = '', userAgent = '') {
+    const allowedThemes = ['light', 'dark', 'system'];
+    const allowedDateFormats = ['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD'];
+    const allowedTimeFormats = ['12h', '24h'];
+
+    if (updates.theme !== undefined && !allowedThemes.includes(updates.theme)) {
+      throw new ApiError(400, 'Invalid theme preference. Supported options are: light, dark, system.');
+    }
+    if (updates.dateFormat !== undefined && !allowedDateFormats.includes(updates.dateFormat)) {
+      throw new ApiError(400, 'Invalid date format. Supported options are: DD/MM/YYYY, MM/DD/YYYY, YYYY-MM-DD.');
+    }
+    if (updates.timeFormat !== undefined && !allowedTimeFormats.includes(updates.timeFormat)) {
+      throw new ApiError(400, 'Invalid time format. Supported options are: 12h, 24h.');
+    }
+
     if (userId === 'super_admin_system') {
-      return {
+      const email = env.superAdminEmail || 'devadharshinichitturi95@gmail.com';
+      let saUser = await User.findOne({ email });
+      if (!saUser) {
+        const superAdminRole = await Role.findOne({ name: 'SUPER_ADMIN' });
+        saUser = new User({
+          firstName: 'Super',
+          lastName: 'Administrator',
+          email,
+          password: env.superAdminPasswordHash || '$2b$10$iLkrpJxDtNKXSJW8XTdeLepBMSj0jEU.OV74HALcYixR2jRGz4n/a',
+          role: superAdminRole?._id,
+          roleName: 'SUPER_ADMIN',
+          status: 'active',
+          isActive: true,
+        });
+      }
+
+      const currentPreferences = saUser.preferences || {};
+      saUser.preferences = {
+        ...currentPreferences,
         ...updates,
+        notifications: {
+          ...(currentPreferences.notifications || {}),
+          ...(updates.notifications || {}),
+        },
       };
+
+      saUser.markModified('preferences');
+      await saUser.save({ validateBeforeSave: false });
+
+      await AuditLog.create({
+        userEmail: email,
+        userRole: 'SUPER_ADMIN',
+        action: 'UPDATE_SETTINGS',
+        module: 'admin',
+        ipAddress,
+        userAgent,
+        status: 'SUCCESS',
+        details: { updatedKeys: Object.keys(updates) },
+      });
+
+      return saUser.preferences;
     }
 
     const user = await User.findById(userId);

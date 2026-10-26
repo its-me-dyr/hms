@@ -238,7 +238,7 @@ export default function PatientSearchTab({
       {/* Results Section */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a' }}>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             Search Results ({patients.length})
           </h2>
         </div>
@@ -330,7 +330,7 @@ export default function PatientSearchTab({
                         <div
                           style={{
                             fontWeight: 700,
-                            color: '#0f172a',
+                            color: 'var(--text-primary)',
                             fontSize: '1.05rem',
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',

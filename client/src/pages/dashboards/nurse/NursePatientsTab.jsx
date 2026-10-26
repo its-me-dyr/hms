@@ -259,7 +259,7 @@ export default function NursePatientsTab({ onNavigateTab }) {
                   {getInitials(p.name)}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#0f172a' }}>
+                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
                     {p.name}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
@@ -271,7 +271,7 @@ export default function NursePatientsTab({ onNavigateTab }) {
               {/* Clinical Details */}
               <div
                 style={{
-                  background: '#f8fafc',
+                  background: 'var(--bg-surface)',
                   padding: '0.75rem 0.85rem',
                   borderRadius: '8px',
                   border: '1px solid var(--border-color)',
@@ -284,13 +284,13 @@ export default function NursePatientsTab({ onNavigateTab }) {
                 }}
               >
                 <div>
-                  <strong style={{ color: '#0f172a' }}>Diagnosis:</strong> {p.diagnosis}
+                  <strong style={{ color: 'var(--text-primary)' }}>Diagnosis:</strong> {p.diagnosis}
                 </div>
                 <div>
-                  <strong style={{ color: '#0f172a' }}>Physician:</strong> {p.attendingDoctor}
+                  <strong style={{ color: 'var(--text-primary)' }}>Physician:</strong> {p.attendingDoctor}
                 </div>
                 <div>
-                  <strong style={{ color: '#0f172a' }}>Diet:</strong> {p.diet}
+                  <strong style={{ color: 'var(--text-primary)' }}>Diet:</strong> {p.diet}
                 </div>
                 <div>
                   <strong style={{ color: '#dc2626' }}>Allergies:</strong> {p.allergies}
@@ -366,13 +366,13 @@ export default function NursePatientsTab({ onNavigateTab }) {
 
             <div className="rec-modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {/* Patient Top Banner */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '1rem 1.25rem', borderRadius: '12px', border: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-surface)', padding: '1rem 1.25rem', borderRadius: '12px', border: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '0.75rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                   <div className="rec-avatar-circle" style={{ width: 48, height: 48, fontSize: '1.1rem', background: '#e0f2fe', color: '#0284c7' }}>
                     {getInitials(selectedPatient.name)}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 800, fontSize: '1.2rem', color: '#0f172a' }}>{selectedPatient.name}</div>
+                    <div style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-primary)' }}>{selectedPatient.name}</div>
                     <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
                       UHID: <strong>{selectedPatient.patientId}</strong> • {selectedPatient.gender} • {selectedPatient.age} yrs • Blood Group: <strong style={{ color: '#0891b2' }}>{selectedPatient.bloodGroup}</strong>
                     </div>
@@ -396,23 +396,23 @@ export default function NursePatientsTab({ onNavigateTab }) {
                 {/* Left Column: Patient Info, Admission, Telemetry Vitals & Labs */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <div style={{ background: 'var(--bg-card)', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', marginBottom: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)', marginBottom: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Admission & Support Telemetry
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', fontSize: '0.8125rem' }}>
-                      <div><span style={{ color: '#64748b' }}>Admitted:</span> <strong style={{ color: '#0f172a' }}>{selectedPatient.admissionDate}</strong></div>
-                      <div><span style={{ color: '#64748b' }}>Code Status:</span> <strong style={{ color: '#0f172a' }}>{selectedPatient.codeStatus}</strong></div>
-                      <div><span style={{ color: '#64748b' }}>IV Access:</span> <strong style={{ color: '#0f172a' }}>{selectedPatient.ivAccess}</strong></div>
-                      <div><span style={{ color: '#64748b' }}>Oxygen / Resp:</span> <strong style={{ color: '#0f172a' }}>{selectedPatient.oxygen}</strong></div>
-                      <div><span style={{ color: '#64748b' }}>Dietary:</span> <strong style={{ color: '#0f172a' }}>{selectedPatient.diet}</strong></div>
+                      <div><span style={{ color: '#64748b' }}>Admitted:</span> <strong style={{ color: 'var(--text-primary)' }}>{selectedPatient.admissionDate}</strong></div>
+                      <div><span style={{ color: '#64748b' }}>Code Status:</span> <strong style={{ color: 'var(--text-primary)' }}>{selectedPatient.codeStatus}</strong></div>
+                      <div><span style={{ color: '#64748b' }}>IV Access:</span> <strong style={{ color: 'var(--text-primary)' }}>{selectedPatient.ivAccess}</strong></div>
+                      <div><span style={{ color: '#64748b' }}>Oxygen / Resp:</span> <strong style={{ color: 'var(--text-primary)' }}>{selectedPatient.oxygen}</strong></div>
+                      <div><span style={{ color: '#64748b' }}>Dietary:</span> <strong style={{ color: 'var(--text-primary)' }}>{selectedPatient.diet}</strong></div>
                       <div><span style={{ color: '#64748b' }}>Fall Risk:</span> <strong style={{ color: '#d97706' }}>Standard Protocol</strong></div>
                     </div>
                   </div>
 
                   {/* Current Vitals Profile */}
-                  <div style={{ background: '#f8fafc', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
+                  <div style={{ background: 'var(--bg-surface)', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem' }}>
-                      <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                         Latest Vitals Stream
                       </span>
                       <span style={{ fontSize: '0.72rem', color: '#64748b' }}>{selectedPatient.lastVitals.time}</span>
@@ -420,7 +420,7 @@ export default function NursePatientsTab({ onNavigateTab }) {
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.65rem', textAlign: 'center' }}>
                       <div style={{ background: 'var(--bg-card)', padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                         <div style={{ fontSize: '0.7rem', color: '#64748b' }}>Blood Pressure</div>
-                        <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#0f172a' }}>{selectedPatient.lastVitals.bp}</div>
+                        <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{selectedPatient.lastVitals.bp}</div>
                       </div>
                       <div style={{ background: 'var(--bg-card)', padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                         <div style={{ fontSize: '0.7rem', color: '#64748b' }}>Heart Rate</div>
@@ -437,10 +437,10 @@ export default function NursePatientsTab({ onNavigateTab }) {
                 {/* Right Column: Diagnosis, Orders, Allergies, Care Plans */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <div style={{ background: 'var(--bg-card)', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '10px' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Primary Diagnosis & Attending Staff
                     </div>
-                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#0f172a', fontWeight: 600 }}>{selectedPatient.diagnosis}</p>
+                    <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 600 }}>{selectedPatient.diagnosis}</p>
                     <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.35rem' }}>
                       Attending Physician: <strong style={{ color: '#0284c7' }}>{selectedPatient.attendingDoctor}</strong>
                     </div>

@@ -12,27 +12,18 @@
 import { useState, useEffect } from 'react';
 import {
   Bed,
-  Building,
-  UserPlus,
-  Search,
   CheckCircle2,
   AlertCircle,
   RefreshCw,
   Plus,
-  Clock,
-  User,
-  Stethoscope,
-  DollarSign,
-  Activity,
 } from 'lucide-react';
 import { receptionService } from '../../../services/reception.service';
 
-export default function AdmissionTab({ onSelectPatient }) {
+export default function AdmissionTab({ _onSelectPatient }) {
   const [bedsData, setBedsData] = useState({ wards: [], stats: { total: 0, available: 0, occupied: 0, maintenance: 0 } });
   const [departments, setDepartments] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [feedback, setFeedback] = useState(null);
 
   // Selected ward filter
@@ -62,7 +53,6 @@ export default function AdmissionTab({ onSelectPatient }) {
 
   const loadBedData = async () => {
     setLoading(true);
-    setError('');
     try {
       const [resBeds, resDepts, resDocs] = await Promise.all([
         receptionService.getBedAvailability(),
@@ -82,7 +72,7 @@ export default function AdmissionTab({ onSelectPatient }) {
       }
     } catch (err) {
       console.error('Failed to load beds data:', err);
-      setError(err.message || 'Unable to retrieve ward bed statuses.');
+      setFeedback({ type: 'error', text: err.message || 'Unable to retrieve ward bed statuses.' });
     } finally {
       setLoading(false);
     }
@@ -391,7 +381,7 @@ export default function AdmissionTab({ onSelectPatient }) {
                           color: isAvail ? '#16a34a' : isOcc ? '#dc2626' : '#d97706',
                         }}
                       />
-                      <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.85rem' }}>
+                      <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.85rem' }}>
                         {bed.number}
                       </div>
                       <div style={{ fontSize: '0.72rem', color: '#64748b' }}>

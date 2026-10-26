@@ -8,17 +8,13 @@
  * - Fast batch traceability to supplier and procurement records
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Clock,
   Search,
-  Filter,
   RefreshCw,
-  AlertTriangle,
-  CheckCircle2,
-  Calendar,
-  XCircle,
   Truck,
+  AlertCircle,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
@@ -27,12 +23,13 @@ export default function BatchesExpiryTab({ onNavigateTab }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  const fetchBatches = () => {
+  const fetchBatches = useCallback(() => {
     setLoading(true);
     setError('');
-    pharmacyService.getBatches({ filter: filterStatus, search })
+    pharmacyService.getBatches({ filter: filterStatus, search: activeSearch })
       .then((res) => {
         const list = res.data || [];
         setBatches(Array.isArray(list) ? list : []);
@@ -44,15 +41,15 @@ export default function BatchesExpiryTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [filterStatus, activeSearch]);
 
   useEffect(() => {
     fetchBatches();
-  }, [filterStatus]);
+  }, [fetchBatches]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchBatches();
+    setActiveSearch(search);
   };
 
   const validCount = batches.filter((b) => b.status === 'Valid').length;
@@ -90,6 +87,14 @@ export default function BatchesExpiryTab({ onNavigateTab }) {
           </button>
         </div>
       </div>
+
+      {/* ── Error Alert ── */}
+      {error && (
+        <div style={{ padding: '0.85rem 1rem', background: '#fee2e2', borderRadius: '8px', color: '#b91c1c', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <AlertCircle size={16} />
+          <span>{error}</span>
+        </div>
+      )}
 
       {/* ── Risk Counter Strip ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>

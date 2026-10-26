@@ -7,24 +7,19 @@
  * - View Purchase Order modal with full line-item breakdowns
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   ClipboardList,
-  Search,
   Plus,
-  Filter,
   RefreshCw,
   Eye,
   X,
-  Truck,
-  Building2,
-  Calendar,
   AlertCircle,
   CheckCircle2,
 } from 'lucide-react';
 import { pharmacyService } from '../../../services/pharmacy.service';
 
-export default function PurchaseOrdersTab({ onNavigateTab }) {
+export default function PurchaseOrdersTab({ onNavigateTab: _onNavigateTab }) {
   const [orders, setOrders] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [medicines, setMedicines] = useState([]);
@@ -44,7 +39,7 @@ export default function PurchaseOrdersTab({ onNavigateTab }) {
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchOrders = () => {
+  const fetchOrders = useCallback(() => {
     setLoading(true);
     setError('');
     Promise.all([
@@ -64,11 +59,11 @@ export default function PurchaseOrdersTab({ onNavigateTab }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }, [statusFilter]);
 
   useEffect(() => {
     fetchOrders();
-  }, [statusFilter]);
+  }, [fetchOrders]);
 
   const handleAddItemRow = () => {
     setOrderItems([...orderItems, { medicineName: 'Amoxicillin & Clavulanate 625mg', quantity: 50, unitPrice: 11.20 }]);
@@ -314,11 +309,18 @@ export default function PurchaseOrdersTab({ onNavigateTab }) {
                     </button>
                   </div>
 
+                  <datalist id="po-med-list">
+                    {medicines.map((m) => (
+                      <option key={m.id || m._id} value={`${m.name} ${m.strength || ''}`.trim()} />
+                    ))}
+                  </datalist>
+
                   {orderItems.map((item, idx) => (
                     <div key={idx} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', alignItems: 'center' }}>
                       <input
                         type="text"
                         required
+                        list="po-med-list"
                         className="pharm-form-input"
                         placeholder="Medicine Name / Strength"
                         style={{ flex: 2 }}

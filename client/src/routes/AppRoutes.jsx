@@ -14,6 +14,7 @@ import DashboardLayout from '../layouts/DashboardLayout';
 // Public Pages
 import LandingPage from '../pages/Landing/LandingPage';
 import LoginPage from '../pages/auth/LoginPage';
+import ForceChangePasswordPage from '../pages/auth/ForceChangePasswordPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import UnauthorizedPage from '../pages/UnauthorizedPage';
 
@@ -41,6 +42,16 @@ export default function AppRoutes() {
       {/* ─── Public Auth Pages (Staff and patients are provisioned by staff) ──────────────── */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Navigate to="/login" replace />} />
+
+      {/* ─── Forced Password Change for Temporary Passwords ──────────────── */}
+      <Route
+        path="/force-change-password"
+        element={
+          <ProtectedRoute>
+            <ForceChangePasswordPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* ─── Protected Role-Based Dashboards ────────────────── */}
       <Route
@@ -110,7 +121,7 @@ export default function AppRoutes() {
         <Route
           path="/dashboard/pharmacist"
           element={
-            <RoleRoute roles={['pharmacist', 'super_admin', 'hospital_admin']}>
+            <RoleRoute roles={['pharmacist', 'super_admin']}>
               <PharmacyDashboard />
             </RoleRoute>
           }
@@ -118,7 +129,7 @@ export default function AppRoutes() {
         <Route
           path="/dashboard/pharmacy"
           element={
-            <RoleRoute roles={['pharmacist', 'super_admin', 'hospital_admin']}>
+            <RoleRoute roles={['pharmacist', 'super_admin']}>
               <PharmacyDashboard />
             </RoleRoute>
           }
@@ -126,7 +137,7 @@ export default function AppRoutes() {
         <Route
           path="/dashboard/lab"
           element={
-            <RoleRoute roles={['lab_technician', 'super_admin', 'hospital_admin']}>
+            <RoleRoute roles={['lab_technician', 'super_admin']}>
               <LabTechnicianDashboard />
             </RoleRoute>
           }
@@ -134,7 +145,7 @@ export default function AppRoutes() {
         <Route
           path="/dashboard/lab-technician"
           element={
-            <RoleRoute roles={['lab_technician', 'super_admin', 'hospital_admin']}>
+            <RoleRoute roles={['lab_technician', 'super_admin']}>
               <LabTechnicianDashboard />
             </RoleRoute>
           }
@@ -143,7 +154,7 @@ export default function AppRoutes() {
         <Route
           path="/dashboard/radiology"
           element={
-            <RoleRoute roles={['radiology_staff', 'radiologist', 'radiology', 'super_admin', 'hospital_admin']}>
+            <RoleRoute roles={['radiology_staff', 'radiologist', 'radiology', 'super_admin']}>
               <RadiologyDashboard />
             </RoleRoute>
           }

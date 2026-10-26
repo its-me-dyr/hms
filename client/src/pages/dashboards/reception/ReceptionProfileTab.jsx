@@ -163,7 +163,7 @@ export default function ReceptionProfileTab({ user }) {
               {(profileData.firstName || 'R').charAt(0).toUpperCase()}
             </div>
 
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.25rem' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
               {profileData.firstName} {profileData.lastName}
             </h2>
             <div style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1rem' }}>
@@ -198,7 +198,7 @@ export default function ReceptionProfileTab({ user }) {
 
           {/* Shift Handover Card */}
           <div className="rec-card" style={{ padding: '1.25rem' }}>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.5rem' }}>
+            <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
               Front Desk Handover Protocol
             </h3>
             <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5, marginBottom: '1rem' }}>

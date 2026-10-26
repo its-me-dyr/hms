@@ -341,7 +341,7 @@ export default function OPDRegistrationTab() {
                                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-card)')}
                               >
                                 <div>
-                                  <div style={{ fontWeight: 600, color: '#0f172a' }}>
+                                  <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                                     {p.firstName} {p.lastName}
                                   </div>
                                   <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
@@ -533,21 +533,21 @@ export default function OPDRegistrationTab() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
                     <span style={{ color: '#64748b' }}>Consultation Type</span>
-                    <strong style={{ color: '#0f172a' }}>Standard Outpatient</strong>
+                    <strong style={{ color: 'var(--text-primary)' }}>Standard Outpatient</strong>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
                     <span style={{ color: '#64748b' }}>Registration Fee</span>
-                    <strong style={{ color: '#0f172a' }}>₹ 100</strong>
+                    <strong style={{ color: 'var(--text-primary)' }}>₹ 100</strong>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
                     <span style={{ color: '#64748b' }}>Doctor Consultation</span>
-                    <strong style={{ color: '#0f172a' }}>₹ {formData.consultationFee - 100}</strong>
+                    <strong style={{ color: 'var(--text-primary)' }}>₹ {formData.consultationFee - 100}</strong>
                   </div>
 
                   <hr style={{ border: 'none', borderTop: '1px dashed #cbd5e1', margin: '0.5rem 0' }} />
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', fontWeight: 800 }}>
-                    <span style={{ color: '#0f172a' }}>Total Payable:</span>
+                    <span style={{ color: 'var(--text-primary)' }}>Total Payable:</span>
                     <span style={{ color: '#0891b2' }}>₹ {formData.consultationFee}</span>
                   </div>
                 </div>
@@ -592,7 +592,7 @@ export default function OPDRegistrationTab() {
             {/* Printable Slip Container */}
             <div className="rec-print-area" style={{ padding: '2rem', backgroundColor: 'var(--bg-card)', borderRadius: '12px' }}>
               <div style={{ textAlign: 'center', borderBottom: '2px solid #0891b2', paddingBottom: '1rem', marginBottom: '1rem' }}>
-                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: '#0f172a', letterSpacing: '0.5px' }}>
+                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.5px' }}>
                   HEALTHCARE MEDICAL SYSTEM
                 </div>
                 <div style={{ fontSize: '0.8rem', color: '#64748b' }}>

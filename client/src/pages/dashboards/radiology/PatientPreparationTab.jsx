@@ -157,7 +157,7 @@ export default function PatientPreparationTab({ _onNavigateTab }) {
           ) : items.length === 0 ? (
             <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
               <ShieldCheck size={36} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-              <p style={{ fontWeight: 600, color: '#475569' }}>No patients awaiting preparation protocoling.</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>No patients awaiting preparation protocoling.</p>
               <p style={{ fontSize: '0.85rem' }}>All active studies are cleared or no scheduled appointments found.</p>
             </div>
           ) : (
@@ -251,8 +251,8 @@ export default function PatientPreparationTab({ _onNavigateTab }) {
               </button>
             </div>
             <div className="lab-modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: '#475569' }}>Exam Safety Requirements</h4>
+              <div style={{ background: 'var(--bg-surface)', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                <h4 style={{ margin: '0 0 0.3rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Exam Safety Requirements</h4>
                 <div style={{ fontSize: '0.85rem', color: '#334155' }}>
                   Modality: <strong>{activeItem.modality}</strong> | Body Part: <strong>{activeItem.bodyPart || 'General'}</strong>
                 </div>
